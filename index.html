@@ -398,9 +398,10 @@ img,svg{display:block;max-width:100%}
 }
 .mc-hero-right{flex-direction:column;gap:0}
 .mc-hero-easter{
-  font-size:13px;color:rgba(212,175,55,0.45);font-style:italic;
+  font-size:13px;color:var(--gold);font-style:italic;
   font-family:var(--sans);letter-spacing:0.05em;text-align:center;
   margin-top:14px;pointer-events:none;
+  opacity:0.03;transition:opacity .15s ease;mix-blend-mode:screen;
 }
 
 /* ── Tweaks panel overrides (keep low specificity) ───────────────── */
@@ -665,7 +666,7 @@ function FloatingNav({ items, activeIdx }) {
 /* ═══════════════════════════════════════════════════════════════════
    HERO
 ═══════════════════════════════════════════════════════════════════ */
-function HeroCanvas({ heroRef, h1Ref, descRef, logoRef }) {
+function HeroCanvas({ heroRef, h1Ref, descRef, logoRef, easterRef }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -703,6 +704,12 @@ function HeroCanvas({ heroRef, h1Ref, descRef, logoRef }) {
         const d = Math.hypot(mx - W * 0.74, my - H * 0.50);
         const prox = Math.max(0, 1 - d / Math.hypot(W * 0.42, H * 0.55));
         logo.style.opacity = 0.05 + prox * 0.55;
+      }
+      const easter = easterRef.current;
+      if (easter) {
+        const d = Math.hypot(mx - W * 0.74, my - H * 0.72);
+        const prox = Math.max(0, 1 - d / Math.hypot(W * 0.42, H * 0.45));
+        easter.style.opacity = 0.03 + prox * 0.52;
       }
     };
     document.addEventListener('mousemove', onMove);
@@ -782,10 +789,11 @@ function Hero({ tweaks }) {
   const h1Ref = useRef(null);
   const descRef = useRef(null);
   const logoRef = useRef(null);
+  const easterRef = useRef(null);
 
   return (
     <section ref={heroRef} className="mc-hero-v2" id="hero">
-      <HeroCanvas heroRef={heroRef} h1Ref={h1Ref} descRef={descRef} logoRef={logoRef} />
+      <HeroCanvas heroRef={heroRef} h1Ref={h1Ref} descRef={descRef} logoRef={logoRef} easterRef={easterRef} />
 
       <div className="mc-hero-top">
         <span className="mono cream-dim">★ Vol. XXVI · Budapest 2026</span>
@@ -824,7 +832,7 @@ function Hero({ tweaks }) {
             className="mc-hero-logo"
             style={{ mixBlendMode: tweaks.blendMode || 'screen' }}
           />
-          <p className="mc-hero-easter">Kis kalappal is lehet nagyot köszönni. 🎩</p>
+          <p ref={easterRef} className="mc-hero-easter">Kis kalappal is lehet nagyot köszönni!</p>
         </div>
       </div>
     </section>
@@ -1062,12 +1070,10 @@ function CTA() {
             Ismerjük meg<br /><em>egymást.</em>
           </h2>
           <p className="cream-dim mc-cta-desc">
-            30 perc elég ahhoz, hogy kiderüljön — van-e közös alap. Semmihez nem kötelez.
+            Egy rövid hívás alatt kiderül, hogy tudunk-e együtt dolgozni. Nem kötelez semmire.
           </p>
           <ul className="mc-cta-meta">
             <li><span className="mono cream-dim">EMAIL</span><a href="mailto:hello@minicrew.hu">hello@minicrew.hu</a></li>
-            <li><span className="mono cream-dim">TELEFON</span><a href="tel:+3630">+36 30 ··· ····</a></li>
-            <li><span className="mono cream-dim">CÍM</span><span>Budapest VII. ker.</span></li>
           </ul>
         </div>
 
@@ -1080,7 +1086,7 @@ function CTA() {
           {sent ? (
             <div className="mc-cta-sent">
               <div className="serif-it" style={{ fontSize:36, color:'var(--gold)', marginBottom:12 }}>Köszönjük.</div>
-              <p className="cream-dim">24 órán belül visszaírunk — addig is, jó nézést a többi munkánkon!</p>
+              <p className="cream-dim">Megkaptuk az üzeneted — hamarosan jelentkezünk.</p>
             </div>
           ) : (
             <>
