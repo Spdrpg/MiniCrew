@@ -111,11 +111,11 @@ img,svg{display:block;max-width:100%}
   color:rgba(245,236,215,.22);font-weight:300;transition:color .15s ease;
 }
 .mc-hero-actions{display:flex;gap:10px;flex-wrap:wrap}
-.mc-hero-right{position:relative;display:flex;align-items:center;justify-content:flex-start;height:100%}
+.mc-hero-right{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
 .mc-hero-logo{
   width:auto;height:min(76vh,540px);max-width:100%;opacity:.12;mix-blend-mode:screen;
   filter:brightness(2.6) contrast(1.15);transition:opacity .15s ease;
-  display:block;object-fit:contain;margin-left:-40px;
+  display:block;object-fit:contain;
 }
 @media(max-width:900px){
   .mc-hero-v2{height:auto;min-height:100svh;max-height:none}
@@ -396,12 +396,16 @@ img,svg{display:block;max-width:100%}
   font-size:12px;color:var(--cream-dim);font-style:italic;
   font-family:var(--serif);margin-bottom:18px;padding-top:4px;
 }
-.mc-hero-right{flex-direction:column;gap:0}
 .mc-hero-easter{
-  font-size:13px;color:var(--gold);font-style:italic;
+  font-size:14px;color:var(--cream);font-style:italic;
   font-family:var(--sans);letter-spacing:0.05em;text-align:center;
-  margin-top:14px;pointer-events:none;
+  margin-top:6px;pointer-events:none;
   opacity:0.03;transition:opacity .15s ease;mix-blend-mode:screen;
+  filter:brightness(2.6) contrast(1.15);
+  text-decoration:underline;
+  text-decoration-color:rgba(212,175,55,0.55);
+  text-underline-offset:4px;
+  text-decoration-thickness:1px;
 }
 
 /* ── Tweaks panel overrides (keep low specificity) ───────────────── */
