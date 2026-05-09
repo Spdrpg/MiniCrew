@@ -387,6 +387,22 @@ img,svg{display:block;max-width:100%}
 .mc-footer-list a:hover{border-color:var(--gold);color:var(--gold)}
 .mc-footer-bot{display:flex;justify-content:space-between;padding-top:24px;flex-wrap:wrap;gap:14px;font-size:10px}
 
+/* ── New elements ────────────────────────────────────────────────── */
+.mc-svc-qualifier{
+  display:block;font-size:10px;color:var(--gold);letter-spacing:0.15em;
+  opacity:0.75;font-variant:small-caps;text-transform:uppercase;margin-top:16px;
+}
+.mc-plan-price-note{
+  font-size:12px;color:var(--cream-dim);font-style:italic;
+  font-family:var(--serif);margin-bottom:18px;padding-top:4px;
+}
+.mc-hero-right{flex-direction:column;gap:0}
+.mc-hero-easter{
+  font-size:13px;color:rgba(212,175,55,0.45);font-style:italic;
+  font-family:var(--sans);letter-spacing:0.05em;text-align:center;
+  margin-top:14px;pointer-events:none;
+}
+
 /* ── Tweaks panel overrides (keep low specificity) ───────────────── */
 .cream-dim{color:var(--cream-dim)}
 .serif-it{font-family:var(--serif);font-style:italic}
@@ -795,8 +811,8 @@ function Hero({ tweaks }) {
           </p>
 
           <div className="mc-hero-actions">
-            <GoldButton href="#services">Munkáink</GoldButton>
-            <GoldButton href="#cta" ghost>Beszéljünk →</GoldButton>
+            <GoldButton href="#cta">Ajánlatot kérek</GoldButton>
+            <GoldButton href="#services" ghost>Munkáink →</GoldButton>
           </div>
         </div>
 
@@ -808,6 +824,7 @@ function Hero({ tweaks }) {
             className="mc-hero-logo"
             style={{ mixBlendMode: tweaks.blendMode || 'screen' }}
           />
+          <p className="mc-hero-easter">Kis kalappal is lehet nagyot köszönni. 🎩</p>
         </div>
       </div>
     </section>
@@ -820,7 +837,8 @@ function Hero({ tweaks }) {
 const SERVICES = [
   { no:'01', t:'Social media videók', hu:'Reels · TikTok · Shorts',
     body:'Forgatókönyvtől a vágásig. Algoritmus-tudatos tartalom, ami nem csak elér, hanem konvertál — lájk helyett vásárlót hoz.',
-    details:['forgatókönyv és ritmus','forgatás és világítás','vágás · felirat · zene','platform-specifikus export'] },
+    details:['forgatókönyv és ritmus','forgatás és világítás','vágás · felirat · zene','platform-specifikus export'],
+    qualifier:'Napelemes telepítőknek · Ipari automatizációnak · Építőiparnak' },
   { no:'02', t:'Weboldal tervezés', hu:'Landing-től full site-ig',
     body:'Modern, gyors, mobilbarát oldalak. Karbantartással együtt — egy gájddal, hogy te is tudd jövőben írni vagy bővíteni.',
     details:['UX & wireframe','design rendszer','Webflow vagy egyedi kód','SEO alapok és analytics'] },
@@ -838,7 +856,7 @@ function Services() {
     <section id="services" className="mc-section">
       <div className="container">
         <Eyebrow no="II">Amit csinálunk</Eyebrow>
-        <h2 className="mc-h2 serif">Négy dolog. <em>Mindegyiket jól.</em></h2>
+        <h2 className="mc-h2 serif">Szolgáltatások.</h2>
 
         <div className="mc-svc-grid">
           <ol className="mc-svc-list">
@@ -860,6 +878,9 @@ function Services() {
             <h3 className="mc-svc-detail-t serif">{SERVICES[open].t}</h3>
             <p className="mc-svc-detail-hu serif-it">{SERVICES[open].hu}</p>
             <p className="mc-svc-detail-body cream-dim">{SERVICES[open].body}</p>
+            {SERVICES[open].qualifier && (
+              <p className="mc-svc-qualifier">{SERVICES[open].qualifier}</p>
+            )}
             <ul className="mc-svc-bullets">
               {SERVICES[open].details.map((d, i) => (
                 <li key={i}><span className="mono mc-svc-bul-mark">→</span> {d}</li>
@@ -888,7 +909,7 @@ function Process() {
     <section ref={ref} id="process" className="mc-section mc-process">
       <div className="container">
         <Eyebrow no="III">Hogyan dolgozunk</Eyebrow>
-        <h2 className="mc-h2 serif">Egyszerű a folyamat.<br /><em>Mindent előre látsz.</em></h2>
+        <h2 className="mc-h2 serif">Átlátható folyamat.<br /><em>Nincsenek meglepetések.</em></h2>
 
         <div className="mc-process-row">
           {STEPS.map((s, i) => (
@@ -917,18 +938,13 @@ const QUOTES = [
   { q:'A weboldalunk egy héten belül kész lett — azóta háromszor annyi ajánlatkérést kapunk. Megérte minden forintját.', who:'Varga Eszter', role:'CEO · StyleBox Kft.' },
 ];
 
-const STATS = [
-  { num:'48h',  label:'Visszajelzési idő' },
-  { num:'100%', label:'Házon belüli gyártás' },
-  { num:'2×',   label:'Gyorsabb mint egy ügynökség' },
-];
 
 function Results() {
   return (
     <section id="results" className="mc-section">
       <div className="container">
         <Eyebrow no="IV">Ügyfeleink mondták</Eyebrow>
-        <h2 className="mc-h2 serif">Eredmények,<br /><em>nem ígéretek.</em></h2>
+        <h2 className="mc-h2 serif">Amit ügyfeleink<br /><em>mondanak rólunk.</em></h2>
 
         <div className="mc-testi-row">
           {QUOTES.map((q, i) => (
@@ -943,14 +959,6 @@ function Results() {
           ))}
         </div>
 
-        <div className="mc-stats-row">
-          {STATS.map((s, i) => (
-            <div key={i} className="mc-stat">
-              <div className="mc-stat-num serif">{s.num}</div>
-              <div className="mc-stat-label mono cream-dim">{s.label}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -979,10 +987,10 @@ function Pricing() {
     <section id="pricing" className="mc-section mc-pricing">
       <div className="container">
         <Eyebrow no="V">Átlátható árazás</Eyebrow>
-        <h2 className="mc-h2 serif">Csomagok.<br /><em>Mindig árajánlatra.</em></h2>
+        <h2 className="mc-h2 serif">Csomagok.</h2>
         <p className="mc-h2-sub cream-dim">
-          Minden projekt egyedi. Az alábbiakban a tipikus együttműködési formákat látod — pontos árat
-          a briefing után, írásban kapod.
+          Nem tömegtermék. Minden projekt egyedi árajánlattal indul —
+          mert a te piacodon más a tét, más a tartalom, más az elvárás.
         </p>
 
         <div className="mc-pricing-row">
@@ -997,6 +1005,7 @@ function Pricing() {
                   <li key={j}><span className="mc-plan-point-mark mono">✦</span> {pt}</li>
                 ))}
               </ul>
+              <div className="mc-plan-price-note">Egyedi ajánlat — 30 perces call alapján</div>
               <a href="#cta" className="mc-plan-cta">{p.cta} →</a>
             </article>
           ))}
@@ -1012,7 +1021,7 @@ function Pricing() {
 
 // ✏️  Replace YOUR_FORM_ID with your Formspree endpoint ID.
 // Get one free at https://formspree.io — takes ~2 minutes.
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xojrkpko';
 
 function CTA() {
   const [sent, setSent] = useState(false);
@@ -1050,10 +1059,10 @@ function CTA() {
         <div className="mc-cta-left">
           <Eyebrow no="VI">Kapcsolat</Eyebrow>
           <h2 className="mc-h2 serif" style={{ marginBottom:18 }}>
-            Készen állsz<br />az <em>első lépésre?</em>
+            Ismerjük meg<br /><em>egymást.</em>
           </h2>
           <p className="cream-dim mc-cta-desc">
-            Egy 30 perces hívás elég, hogy kiderüljön — együtt tudunk-e dolgozni. Kötelezettség nélkül.
+            30 perc elég ahhoz, hogy kiderüljön — van-e közös alap. Semmihez nem kötelez.
           </p>
           <ul className="mc-cta-meta">
             <li><span className="mono cream-dim">EMAIL</span><a href="mailto:hello@minicrew.hu">hello@minicrew.hu</a></li>
