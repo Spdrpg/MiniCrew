@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>404 — MiniCrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=DM+Sans:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink-0: #050300;
+    --gold: #d4af37;
+    --cream: #f5ecd7;
+    --cream-dim: #a89a7d;
+    --serif: 'Fraunces','Cormorant Garamond',Georgia,serif;
+    --sans: 'DM Sans',system-ui,sans-serif;
+    --mono: 'JetBrains Mono','IBM Plex Mono',ui-monospace,monospace;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--ink-0);
+    color: var(--cream);
+    font-family: var(--sans);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* Grain */
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1; opacity: .18;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96  0 0 0 0 0.93  0 0 0 0 0.84  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    mix-blend-mode: overlay;
+  }
+
+  .page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .logo-wrap {
+    margin-bottom: 32px;
+  }
+  .logo-wrap img {
+    width: 160px;
+    height: auto;
+    mix-blend-mode: screen;
+    filter: brightness(2.6) contrast(1.15);
+    opacity: 0.85;
+  }
+
+  .code {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+  h1 em { font-style: italic; color: var(--gold); }
+
+  .sub {
+    font-size: 16px;
+    color: var(--cream-dim);
+    max-width: 420px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,175,55,.5), transparent);
+    margin: 0 auto 40px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: background .2s, color .2s;
+  }
+  .btn:hover {
+    background: var(--gold);
+    color: var(--ink-0);
+  }
+
+  .footer-note {
+    position: absolute;
+    bottom: 32px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: rgba(168,154,125,.4);
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="page">
+  <div class="logo-wrap">
+    <img src="/logo.png" alt="MiniCrew erős ember" width="160">
+  </div>
+
+  <p class="code">§ 404 — OLDAL NEM TALÁLHATÓ</p>
+
+  <h1>Bajnok, ezt az oldalt<br>már <em>elnyelte a sötétség.</em></h1>
+
+  <div class="divider"></div>
+
+  <p class="sub">
+    Erős emberünk is megpróbálta megemelni — de még ő sem bír egy hiányzó oldallal.
+    Valószínűleg elírták az URL-t, vagy az oldal már régen elköltözött egy jobb helyre.
+  </p>
+
+  <a href="/" class="btn">← Vissza a főoldalra</a>
+
+  <p class="footer-note">MiniCrew © 2025 — Minden oldalt megtalálunk, kivéve ezt.</p>
+</div>
+</body>
+</html>
