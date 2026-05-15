@@ -8,844 +8,618 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600;1,9..144,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ── Design tokens ───────────────────────────────────────────────── */
 :root{
-  --ink-0:#050300;
-  --ink-1:#0a0703;
-  --ink-2:#120c06;
-  --ink-warm:#15100a;
-  --gold:#d4af37;
-  --gold-deep:#a6822a;
-  --cream:#f5ecd7;
-  --cream-dim:#a89a7d;
+  --ink-0:#050300;--ink-1:#0a0703;--ink-warm:#15100a;
+  --gold:#d4af37;--gold-deep:#a6822a;--cream:#f5ecd7;--cream-dim:#a89a7d;
   --line:rgba(245,236,215,.10);
-  --line-strong:rgba(245,236,215,.24);
   --serif:'Fraunces','Cormorant Garamond',Georgia,serif;
   --sans:'DM Sans',system-ui,sans-serif;
   --mono:'JetBrains Mono','IBM Plex Mono',ui-monospace,monospace;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{
-  background:#050300;color:var(--cream);font-family:var(--sans);
-  font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;overflow-x:hidden;
-}
+html,body{background:#050300;color:var(--cream);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body{min-height:100vh}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 img,svg{display:block;max-width:100%}
 
-/* Grain overlay */
-.grain{
-  position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.18;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96  0 0 0 0 0.93  0 0 0 0 0.84  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  mix-blend-mode:overlay;
-}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.18;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.96  0 0 0 0 0.93  0 0 0 0 0.84  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");mix-blend-mode:overlay}
 
 .serif{font-family:var(--serif);font-weight:500}
 .serif-it{font-family:var(--serif);font-weight:500;font-style:italic}
 .mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
 .cream-dim{color:var(--cream-dim)}
 
-::-webkit-scrollbar{width:10px;height:10px}
-::-webkit-scrollbar-track{background:var(--ink-0)}
-::-webkit-scrollbar-thumb{background:var(--gold-deep);border:2px solid var(--ink-0)}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:var(--ink-0)}::-webkit-scrollbar-thumb{background:var(--gold-deep);border:2px solid var(--ink-0)}
 ::selection{background:var(--gold);color:var(--ink-0)}
 
 .container{max-width:1320px;margin:0 auto;padding:0 40px}
 @media(max-width:720px){.container{padding:0 20px}}
 
-/* ── Top scroll progress ─────────────────────────────────────────── */
+/* Progress */
 .mc-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:100;background:rgba(245,236,215,.06)}
 .mc-progress>div{height:100%;background:var(--gold);transform-origin:left;transform:scaleX(0);transition:transform .12s linear}
 
-/* ── Spotlight (for CTA section) ─────────────────────────────────── */
-.mc-hero-spot{position:relative;isolation:isolate}
-.mc-hero-spot::before{
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(212,175,55,.16) 0%,rgba(212,175,55,.05) 30%,transparent 60%);
-  opacity:var(--mi,0);transition:opacity .25s;
-}
-.mc-hero-spot::after{
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-  background-image:radial-gradient(circle at center,rgba(245,236,215,.05) 1px,transparent 1.4px);
-  background-size:14px 14px;
-  -webkit-mask-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),#000 0%,transparent 60%);
-  mask-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),#000 0%,transparent 60%);
-  opacity:var(--mi,0);transition:opacity .3s;
-}
+/* Eyebrow */
+.mc-eyebrow-wrap{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.mc-eyebrow-text{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:0.18em}
+.mc-eyebrow-no{margin-right:10px;opacity:.55}
+.mc-eyebrow-rule{flex:1;height:1px;background:linear-gradient(to right,rgba(212,175,55,.6),transparent)}
 
-/* ── Hero ─────────────────────────────────────────────────────────── */
-.mc-hero-v2{
-  position:relative;width:100%;height:100svh;min-height:640px;max-height:900px;
-  overflow:hidden;background:#050300;isolation:isolate;
-}
+/* Spotlight (CTA) */
+.mc-hero-spot{position:relative;isolation:isolate}
+.mc-hero-spot::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(212,175,55,.16) 0%,rgba(212,175,55,.05) 30%,transparent 60%);opacity:var(--mi,0);transition:opacity .25s}
+.mc-hero-spot::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at center,rgba(245,236,215,.05) 1px,transparent 1.4px);background-size:14px 14px;-webkit-mask-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),#000 0%,transparent 60%);mask-image:radial-gradient(380px circle at var(--mx,50%) var(--my,50%),#000 0%,transparent 60%);opacity:var(--mi,0);transition:opacity .3s}
+
+/* Hero */
+.mc-hero-v2{position:relative;width:100%;height:100svh;min-height:640px;max-height:900px;overflow:hidden;background:#050300;isolation:isolate}
 .mc-hero-canvas{position:absolute;inset:0;z-index:1;pointer-events:none}
-.mc-hero-top{
-  position:absolute;top:20px;left:0;right:0;z-index:3;
-  display:flex;justify-content:space-between;padding:0 56px;
-  font-size:10px;letter-spacing:.18em;
-}
-.mc-hero-grid{
-  position:relative;z-index:3;max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:1.1fr 1fr;gap:24px;
-  height:100%;padding:64px 56px 48px;align-items:center;
-}
-.mc-hero-eyebrow{
-  display:flex;gap:14px;align-items:center;margin-bottom:24px;
-  font-size:10px;letter-spacing:.18em;flex-wrap:wrap;
-}
-.mc-hero-h1{
-  font-family:var(--serif);font-size:clamp(40px,5.2vw,76px);
-  line-height:1.02;letter-spacing:-.02em;font-weight:500;
-  margin-bottom:24px;color:rgba(245,236,215,.34);transition:color .15s ease;
-  font-variation-settings:"opsz" 100;
-}
+.mc-hero-top{position:absolute;top:20px;left:0;right:0;z-index:3;display:flex;justify-content:space-between;padding:0 56px;font-size:10px;letter-spacing:.18em}
+.mc-hero-grid{position:relative;z-index:3;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.1fr 1fr;gap:24px;height:100%;padding:64px 56px 48px;align-items:center}
+.mc-hero-eyebrow{display:flex;gap:14px;align-items:center;margin-bottom:24px;font-size:10px;letter-spacing:.18em;flex-wrap:wrap}
+.mc-hero-h1{font-family:var(--serif);font-size:clamp(40px,5.2vw,76px);line-height:1.02;letter-spacing:-.02em;font-weight:500;margin-bottom:24px;color:rgba(245,236,215,.34);transition:color .15s ease;font-variation-settings:"opsz" 100}
 .mc-hero-h1 em{font-style:italic;color:var(--gold)}
-.mc-hero-desc{
-  font-size:15px;line-height:1.65;max-width:440px;margin-bottom:32px;
-  color:rgba(245,236,215,.22);font-weight:300;transition:color .15s ease;
-}
+.mc-hero-desc{font-size:15px;line-height:1.65;max-width:440px;margin-bottom:32px;color:rgba(245,236,215,.22);font-weight:300;transition:color .15s ease}
 .mc-hero-actions{display:flex;gap:10px;flex-wrap:wrap}
 .mc-hero-right{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%}
-.mc-hero-logo{
-  width:auto;height:min(76vh,540px);max-width:100%;opacity:.12;mix-blend-mode:screen;
-  filter:brightness(2.6) contrast(1.15);transition:opacity .15s ease;
-  display:block;object-fit:contain;
-}
+.mc-hero-logo{width:auto;height:min(76vh,540px);max-width:100%;opacity:.12;mix-blend-mode:screen;filter:brightness(2.6) contrast(1.15);transition:opacity .15s ease;display:block;object-fit:contain}
+.mc-hero-easter{font-size:14px;color:var(--cream);font-style:italic;font-family:var(--sans);letter-spacing:0.05em;text-align:center;margin-top:6px;pointer-events:none;opacity:0.03;transition:opacity .15s ease;mix-blend-mode:screen;filter:brightness(2.6) contrast(1.15);text-decoration:underline;text-decoration-color:rgba(212,175,55,0.55);text-underline-offset:4px;text-decoration-thickness:1px}
 @media(max-width:900px){
   .mc-hero-v2{height:auto;min-height:100svh;max-height:none}
   .mc-hero-top{padding:0 22px}
   .mc-hero-grid{grid-template-columns:1fr;padding:96px 22px 60px;gap:24px;height:auto}
-  .mc-hero-right{order:-1;height:200px;justify-content:center}
-  .mc-hero-logo{height:200px;opacity:.16;margin-left:0}
+  .mc-hero-right{order:-1;height:200px}
+  .mc-hero-logo{height:200px;opacity:.16}
 }
 
-/* ── Buttons ─────────────────────────────────────────────────────── */
-.mc-btn{
-  position:relative;display:inline-flex;align-items:center;gap:10px;
-  padding:14px 26px;background:var(--gold);color:var(--ink-0);
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  border:1px solid var(--gold);cursor:pointer;
-  transition:transform .25s,box-shadow .25s;
-}
+/* Buttons */
+.mc-btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:14px 26px;background:var(--gold);color:var(--ink-0);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--gold);cursor:pointer;transition:transform .25s,box-shadow .25s}
 .mc-btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,175,55,.25)}
-.mc-btn-arrow{transition:transform .25s}
+.mc-btn .mc-btn-arrow{transition:transform .25s}
 .mc-btn:hover .mc-btn-arrow{transform:translateX(4px)}
 .mc-btn-ghost{background:transparent;color:var(--gold)}
 .mc-btn-ghost:hover{background:rgba(212,175,55,.08)}
 
-/* ── Floating Nav (right edge) ───────────────────────────────────── */
+/* Floating Nav */
 .mc-fnav{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:60}
 .mc-fnav-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;align-items:flex-end}
-.mc-fnav-item a{
-  display:inline-flex;align-items:center;gap:12px;padding:4px 0;
-  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
-  color:var(--cream-dim);transition:color .25s;
-  white-space:nowrap;flex-direction:row-reverse;
-}
+.mc-fnav-item a{display:inline-flex;align-items:center;gap:12px;padding:4px 0;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--cream-dim);transition:color .25s;white-space:nowrap;flex-direction:row-reverse}
 .mc-fnav-item.active a{color:var(--gold)}
-.mc-fnav-line{
-  height:1px;background:currentColor;opacity:.4;
-  width:14px;transition:width .3s ease,opacity .3s ease;flex-shrink:0;
-}
+.mc-fnav-line{height:1px;background:currentColor;opacity:.4;width:14px;transition:width .3s ease,opacity .3s ease;flex-shrink:0}
 .mc-fnav-item.active .mc-fnav-line{width:32px;opacity:1}
 .mc-fnav-item.expanded .mc-fnav-line{opacity:.8}
-.mc-fnav-label{
-  max-width:0;overflow:hidden;opacity:0;
-  transition:max-width .3s ease,opacity .3s ease;text-transform:uppercase;
-}
+.mc-fnav-label{max-width:0;overflow:hidden;opacity:0;transition:max-width .3s ease,opacity .3s ease;text-transform:uppercase}
 .mc-fnav-item.expanded .mc-fnav-label{max-width:200px;opacity:1}
-@media(max-width:760px){
-  .mc-fnav{right:8px}
-  .mc-fnav-item .mc-fnav-label{display:none}
-}
+@media(max-width:760px){.mc-fnav{right:8px}.mc-fnav-item .mc-fnav-label{display:none}}
 
-/* ── Section base ────────────────────────────────────────────────── */
+/* Section base */
 .mc-section{padding:120px 0;position:relative}
 @media(max-width:760px){.mc-section{padding:72px 0}}
-.mc-h2{
-  font-family:var(--serif);font-size:clamp(40px,5.6vw,84px);
-  line-height:1;letter-spacing:-.01em;margin:18px 0 12px;max-width:1100px;font-weight:500;
-}
+.mc-h2{font-family:var(--serif);font-size:clamp(40px,5.6vw,84px);line-height:1;letter-spacing:-.01em;margin:18px 0 12px;max-width:1100px;font-weight:500}
 .mc-h2 em{color:var(--gold);font-style:italic}
-.mc-h2-sub{
-  font-family:var(--serif);font-style:italic;
-  font-size:clamp(17px,1.8vw,22px);max-width:580px;margin-bottom:56px;
-}
-.mc-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px}
-.mc-eyebrow .mc-eyebrow-no{color:var(--gold);font-family:var(--serif);font-style:italic;font-size:14px}
-.mc-eyebrow .mc-eyebrow-rule{width:32px;height:1px;background:var(--gold)}
+.mc-h2-sub{font-family:var(--serif);font-style:italic;font-size:clamp(17px,1.8vw,22px);max-width:580px;margin-bottom:56px}
 
-/* ── Services ────────────────────────────────────────────────────── */
+/* Services */
 .mc-svc-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:start;margin-top:32px}
 @media(max-width:960px){.mc-svc-grid{grid-template-columns:1fr;gap:32px}}
 .mc-svc-list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
-.mc-svc-item{
-  display:grid;grid-template-columns:48px 1fr auto;align-items:baseline;gap:18px;
-  padding:22px 6px;border-bottom:1px solid var(--line);cursor:pointer;
-  transition:padding-left .3s,background .3s;
-}
+.mc-svc-item{display:grid;grid-template-columns:48px 1fr auto;align-items:baseline;gap:18px;padding:22px 6px;border-bottom:1px solid var(--line);cursor:pointer;transition:padding-left .3s,background .3s}
 .mc-svc-item:hover,.mc-svc-item.open{padding-left:18px;background:linear-gradient(to right,rgba(212,175,55,.05),transparent)}
 .mc-svc-no{color:var(--gold);font-size:11px}
-.mc-svc-t{font-size:26px;line-height:1.05;font-weight:500}
+.mc-svc-t{font-size:26px;line-height:1.05;font-weight:500;font-family:var(--serif)}
 .mc-svc-item.open .mc-svc-t{color:var(--gold);font-style:italic}
-.mc-svc-hu{font-size:14px;grid-column:2;margin-top:4px}
+.mc-svc-hu{font-size:14px;grid-column:2;margin-top:4px;font-family:var(--serif);font-style:italic;color:var(--cream-dim)}
 .mc-svc-arrow{color:var(--gold);font-size:14px;opacity:.5;transition:opacity .25s,transform .25s}
-.mc-svc-item.open .mc-svc-arrow{opacity:1;transform:translateX(4px)}
-@media(max-width:720px){
-  .mc-svc-item{grid-template-columns:40px 1fr auto}
-  .mc-svc-t{font-size:22px}
-  .mc-svc-hu{font-size:13px}
-}
-.mc-svc-detail{
-  border:1px solid var(--line);padding:32px;
-  position:sticky;top:80px;max-height:calc(100vh - 120px);overflow-y:auto;
-  animation:mc-fade .35s ease;background:rgba(212,175,55,0.02);
-}
+.mc-svc-item.open .mc-svc-arrow,.mc-svc-item:hover .mc-svc-arrow{opacity:1;transform:translateX(4px)}
+@media(max-width:720px){.mc-svc-item{grid-template-columns:40px 1fr auto}.mc-svc-t{font-size:22px}.mc-svc-hu{font-size:13px}}
+.mc-svc-detail{border:1px solid var(--line);padding:32px;position:sticky;top:80px;max-height:calc(100vh - 120px);overflow-y:auto;animation:mc-fade .35s ease;background:rgba(212,175,55,0.02)}
 @keyframes mc-fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.mc-svc-detail-no{color:var(--gold);font-size:10px}
-.mc-svc-detail-t{font-size:34px;line-height:1.05;margin:8px 0 6px;font-weight:500}
-.mc-svc-detail-hu{font-size:18px;color:var(--gold);margin-bottom:18px}
-.mc-svc-detail-body{margin-bottom:22px;max-width:480px;line-height:1.6}
+.mc-svc-detail-no{color:var(--gold);font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em}
+.mc-svc-detail-t{font-size:34px;line-height:1.05;margin:8px 0 6px;font-weight:500;font-family:var(--serif)}
+.mc-svc-detail-hu{font-size:18px;color:var(--gold);margin-bottom:18px;font-family:var(--serif);font-style:italic}
+.mc-svc-detail-body{margin-bottom:22px;max-width:480px;line-height:1.6;color:var(--cream-dim)}
 .mc-svc-bullets{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .mc-svc-bullets li{display:flex;gap:10px;color:var(--cream-dim);font-size:14px}
-.mc-svc-bul-mark{color:var(--gold)}
+.mc-svc-bul-mark{color:var(--gold);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.mc-svc-qualifier{display:block;font-size:10px;color:var(--gold);letter-spacing:0.15em;opacity:0.75;font-variant:small-caps;text-transform:uppercase;margin-top:16px;font-family:var(--mono)}
 
-/* ── Process ─────────────────────────────────────────────────────── */
+/* Process */
 .mc-process{background:var(--ink-warm);border-block:1px solid var(--line)}
-.mc-process-row{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:0;
-  border:1px solid var(--line);margin-top:32px;
-}
+.mc-process-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);margin-top:32px}
 @media(max-width:900px){.mc-process-row{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.mc-process-row{grid-template-columns:1fr}}
-.mc-process-cell{
-  padding:32px 28px;border-right:1px solid var(--line);
-  transition:opacity .8s ease,transform .8s ease,background .25s ease;
-  display:flex;flex-direction:column;min-height:280px;
-}
+.mc-process-cell{padding:32px 28px;border-right:1px solid var(--line);transition:opacity .8s ease,transform .8s ease,background .25s ease;display:flex;flex-direction:column;min-height:280px}
 .mc-process-cell:last-child{border-right:0}
 .mc-process-cell:hover{background:rgba(212,175,55,0.04)}
-@media(max-width:900px){
-  .mc-process-cell:nth-child(2){border-right:0}
-  .mc-process-cell:nth-child(1),.mc-process-cell:nth-child(2){border-bottom:1px solid var(--line)}
-}
-@media(max-width:560px){
-  .mc-process-cell{border-right:0;border-bottom:1px solid var(--line)}
-  .mc-process-cell:last-child{border-bottom:0}
-}
+@media(max-width:900px){.mc-process-cell:nth-child(2){border-right:0}.mc-process-cell:nth-child(1),.mc-process-cell:nth-child(2){border-bottom:1px solid var(--line)}}
+@media(max-width:560px){.mc-process-cell{border-right:0;border-bottom:1px solid var(--line)}.mc-process-cell:last-child{border-bottom:0}}
 .mc-process-cell-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px}
-.mc-process-roman{font-size:36px;color:var(--gold);line-height:.8}
-.mc-process-cell-t{font-size:22px;line-height:1.1;margin-bottom:6px;font-weight:500}
-.mc-process-cell-time{color:var(--gold);font-size:10px;margin-bottom:14px}
-.mc-process-cell-d{font-size:14px;line-height:1.55}
+.mc-process-roman{font-size:36px;color:var(--gold);line-height:.8;font-family:var(--serif);font-style:italic}
+.mc-process-cell-t{font-size:22px;line-height:1.1;margin-bottom:6px;font-weight:500;font-family:var(--serif)}
+.mc-process-cell-time{color:var(--gold);font-size:10px;margin-bottom:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em}
+.mc-process-cell-d{font-size:14px;line-height:1.55;color:var(--cream-dim)}
 
-/* ── Results / Testimonials ──────────────────────────────────────── */
+/* Testimonials */
 .mc-testi-row{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px}
 @media(max-width:760px){.mc-testi-row{grid-template-columns:1fr}}
-.mc-testi{
-  position:relative;padding:36px 32px;
-  border-left:1px solid var(--line);transition:border-color .35s ease,background .35s ease;
-  cursor:default;
-}
-.mc-testi::before{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(212,175,55,0));
-  opacity:0;transition:opacity .35s ease;pointer-events:none;
-}
+.mc-testi{position:relative;padding:36px 32px;border-left:1px solid var(--line);transition:border-color .35s ease,background .35s ease;cursor:default}
+.mc-testi::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,175,55,0.06),rgba(212,175,55,0));opacity:0;transition:opacity .35s ease;pointer-events:none}
 .mc-testi:hover{border-left-color:var(--gold)}
 .mc-testi:hover::before{opacity:1}
 .mc-testi:hover .mc-testi-mark{color:var(--gold);opacity:.5;transform:scale(1.05)}
 .mc-testi:hover .mc-testi-quote{color:var(--cream)}
-.mc-testi-mark{
-  font-size:80px;color:var(--gold);opacity:.2;line-height:.6;margin-bottom:-12px;
-  transition:opacity .35s,transform .35s,color .35s;transform-origin:left top;
-}
-.mc-testi-quote{
-  font-family:var(--serif);font-size:20px;line-height:1.4;color:var(--cream-dim);
-  margin-bottom:24px;max-width:480px;transition:color .35s;position:relative;z-index:1;
-}
+.mc-testi-mark{font-size:80px;color:var(--gold);opacity:.2;line-height:.6;margin-bottom:-12px;transition:opacity .35s,transform .35s,color .35s;transform-origin:left top;font-family:var(--serif);font-style:italic}
+.mc-testi-quote{font-family:var(--serif);font-size:20px;line-height:1.4;color:var(--cream-dim);margin-bottom:24px;max-width:480px;transition:color .35s;position:relative;z-index:1}
 .mc-testi-by{padding-top:14px;border-top:1px solid var(--line);position:relative;z-index:1}
-.mc-testi-name{font-size:16px;font-weight:600;color:var(--cream)}
-.mc-testi-role{font-size:10px;margin-top:4px}
-.mc-stats-row{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;
-  margin-top:64px;padding-top:48px;border-top:1px solid var(--line);
-}
-@media(max-width:760px){.mc-stats-row{grid-template-columns:1fr;gap:20px}}
-.mc-stat{display:flex;flex-direction:column;gap:6px}
-.mc-stat-num{font-size:64px;line-height:1;color:var(--gold);font-weight:500;letter-spacing:-.02em}
-.mc-stat-label{font-size:10px}
+.mc-testi-name{font-size:16px;font-weight:600;color:var(--cream);font-family:var(--serif)}
+.mc-testi-role{font-size:10px;margin-top:4px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--cream-dim)}
 
-/* ── Pricing ─────────────────────────────────────────────────────── */
+/* Pricing */
 .mc-pricing{background:var(--ink-warm);border-block:1px solid var(--line)}
-.mc-pricing-row{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
-  border:1px solid var(--line);margin-top:32px;
-}
+.mc-pricing-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);margin-top:32px}
 @media(max-width:900px){.mc-pricing-row{grid-template-columns:1fr}}
-.mc-plan{
-  padding:36px 32px;border-right:1px solid var(--line);
-  display:flex;flex-direction:column;transition:background .25s ease;
-}
+.mc-plan{padding:36px 32px;border-right:1px solid var(--line);display:flex;flex-direction:column;transition:background .25s ease}
 .mc-plan:last-child{border-right:0}
 .mc-plan:hover{background:rgba(212,175,55,0.04)}
-@media(max-width:900px){
-  .mc-plan{border-right:0;border-bottom:1px solid var(--line)}
-  .mc-plan:last-child{border-bottom:0}
-}
-.mc-plan-no{color:var(--gold);font-size:10px;margin-bottom:14px}
-.mc-plan-name{font-size:32px;line-height:1;margin-bottom:6px;font-weight:500}
-.mc-plan-sub{font-size:14px;margin-bottom:18px}
-.mc-plan-desc{font-size:14px;line-height:1.6;margin-bottom:22px}
-.mc-plan-points{list-style:none;padding:0;margin:0 0 28px;display:grid;gap:9px;flex:1}
+@media(max-width:900px){.mc-plan{border-right:0;border-bottom:1px solid var(--line)}.mc-plan:last-child{border-bottom:0}}
+.mc-plan-no{color:var(--gold);font-size:10px;margin-bottom:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em}
+.mc-plan-name{font-size:32px;line-height:1;margin-bottom:6px;font-weight:500;font-family:var(--serif)}
+.mc-plan-sub{font-size:14px;margin-bottom:18px;font-family:var(--serif);font-style:italic;color:var(--cream-dim)}
+.mc-plan-desc{font-size:14px;line-height:1.6;margin-bottom:22px;color:var(--cream-dim)}
+.mc-plan-points{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:9px;flex:1}
 .mc-plan-points li{display:flex;gap:10px;color:var(--cream-dim);font-size:14px}
-.mc-plan-point-mark{color:var(--gold)}
-.mc-plan-cta{
-  align-self:flex-start;display:inline-flex;align-items:center;gap:8px;
-  padding:12px 20px;border:1px solid var(--gold);color:var(--gold);
-  font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-family:var(--mono);
-  transition:background .25s,color .25s;
-}
+.mc-plan-point-mark{color:var(--gold);font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+.mc-plan-price-note{font-size:12px;color:var(--cream-dim);font-style:italic;font-family:var(--serif);margin-bottom:18px;padding-top:4px}
+.mc-plan-cta{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border:1px solid var(--gold);color:var(--gold);font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-family:var(--mono);transition:background .25s,color .25s}
 .mc-plan-cta:hover{background:var(--gold);color:var(--ink-0)}
 
-/* ── CTA / form ──────────────────────────────────────────────────── */
+/* CTA */
 .mc-cta{background:#050300}
-.mc-cta-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;
-  position:relative;z-index:2;
-}
+.mc-cta-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;position:relative;z-index:2}
 @media(max-width:900px){.mc-cta-grid{grid-template-columns:1fr;gap:32px}}
-.mc-cta-left .mc-h2{font-size:clamp(40px,5vw,72px)}
-.mc-cta-desc{font-size:16px;line-height:1.6;max-width:440px;margin-bottom:32px}
+.mc-cta-desc{font-size:16px;line-height:1.6;max-width:440px;margin-bottom:32px;color:var(--cream-dim)}
 .mc-cta-meta{list-style:none;padding:0;margin:0;display:grid;gap:14px}
-.mc-cta-meta li{
-  display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:baseline;
-  padding:10px 0;border-top:1px solid var(--line);
-}
+.mc-cta-meta li{display:grid;grid-template-columns:80px 1fr;gap:16px;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}
 .mc-cta-meta li:last-child{border-bottom:1px solid var(--line)}
 .mc-cta-meta a{color:var(--cream);border-bottom:1px solid transparent;transition:border-color .2s}
 .mc-cta-meta a:hover{border-color:var(--gold)}
-.mc-cta-form{
-  border:1px solid var(--line);padding:32px;
-  display:grid;gap:16px;background:rgba(212,175,55,0.02);position:relative;
-}
-.mc-cta-form-no{color:var(--gold);font-size:10px;margin-bottom:8px}
+.mc-cta-form{border:1px solid var(--line);padding:32px;display:grid;gap:16px;background:rgba(212,175,55,0.02)}
+.mc-cta-form-no{color:var(--gold);font-size:10px;margin-bottom:8px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em}
 .mc-cta-field{display:grid;gap:6px}
-.mc-cta-field span{font-size:10px}
-.mc-cta-field input,
-.mc-cta-field select,
-.mc-cta-field textarea{
-  background:transparent;border:0;border-bottom:1px solid var(--line);
-  padding:10px 2px;color:var(--cream);font-family:var(--sans);font-size:15px;
-  transition:border-color .2s;
-}
+.mc-cta-field span{font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--cream-dim)}
+.mc-cta-field input,.mc-cta-field select,.mc-cta-field textarea{background:transparent;border:0;border-bottom:1px solid var(--line);padding:10px 2px;color:var(--cream);font-family:var(--sans);font-size:15px;transition:border-color .2s;width:100%}
 .mc-cta-field select{appearance:none;cursor:pointer}
 .mc-cta-field select option{background:#050300;color:var(--cream)}
-.mc-cta-field textarea{resize:vertical;min-height:80px;font-family:var(--sans)}
-.mc-cta-field input::placeholder,
-.mc-cta-field textarea::placeholder{color:rgba(245,236,215,.25)}
-.mc-cta-field input:focus,
-.mc-cta-field select:focus,
-.mc-cta-field textarea:focus{outline:none;border-color:var(--gold)}
-.mc-cta-submit{
-  display:inline-flex;align-items:center;justify-content:space-between;
-  background:var(--gold);color:var(--ink-0);
-  padding:16px 22px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  border:0;cursor:pointer;transition:transform .25s,box-shadow .25s;margin-top:8px;
-}
+.mc-cta-field textarea{resize:vertical;min-height:80px}
+.mc-cta-field input::placeholder,.mc-cta-field textarea::placeholder{color:rgba(245,236,215,.25)}
+.mc-cta-field input:focus,.mc-cta-field select:focus,.mc-cta-field textarea:focus{outline:none;border-color:var(--gold)}
+.mc-cta-submit{display:inline-flex;align-items:center;justify-content:space-between;background:var(--gold);color:var(--ink-0);padding:16px 22px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:0;cursor:pointer;transition:transform .25s,box-shadow .25s;margin-top:8px;width:100%}
 .mc-cta-submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,175,55,.25)}
 .mc-cta-submit:disabled{opacity:.6;cursor:not-allowed}
-.mc-cta-fineprint{font-size:9px;color:var(--cream-dim);margin-top:4px}
-.mc-cta-sent{padding:24px 0;text-align:center}
-.mc-cta-error{
-  color:#e07070;font-size:13px;padding:10px 14px;
-  border:1px solid rgba(224,112,112,.3);background:rgba(224,112,112,.05);
-}
-/* honeypot */
+.mc-cta-fineprint{font-size:9px;color:var(--cream-dim);margin-top:4px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em}
+.mc-cta-sent{padding:24px 0;text-align:center;display:none}
+.mc-cta-error{color:#e07070;font-size:13px;padding:10px 14px;border:1px solid rgba(224,112,112,.3);background:rgba(224,112,112,.05);display:none}
 .mc-cta-hp{display:none}
 
-/* ── Footer ──────────────────────────────────────────────────────── */
+/* Footer */
 .mc-footer{padding:80px 0 32px;border-top:1px solid var(--line);background:#050300}
-.mc-footer-grid{
-  display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;
-  padding-bottom:48px;border-bottom:1px solid var(--line);
-}
+.mc-footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid var(--line)}
 @media(max-width:760px){.mc-footer-grid{grid-template-columns:1fr 1fr;gap:32px}}
 .mc-footer-brand{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .mc-footer-logo{width:56px;height:auto;opacity:.85;filter:brightness(2.2) contrast(1.1);margin-bottom:4px}
 .mc-footer-mark{font-family:var(--serif);font-style:italic;font-size:32px;color:var(--gold);line-height:1}
-.mc-footer-tag{font-family:var(--serif);font-style:italic;font-size:15px;line-height:1.4;max-width:240px}
-.mc-footer-h{margin-bottom:16px;font-size:10px}
+.mc-footer-tag{font-family:var(--serif);font-style:italic;font-size:15px;line-height:1.4;max-width:240px;color:var(--cream-dim)}
+.mc-footer-h{margin-bottom:16px;font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--cream-dim)}
 .mc-footer-list{list-style:none;padding:0;margin:0;display:grid;gap:8px;font-size:14px}
 .mc-footer-list a{border-bottom:1px solid transparent;transition:border-color .2s}
 .mc-footer-list a:hover{border-color:var(--gold);color:var(--gold)}
-.mc-footer-bot{display:flex;justify-content:space-between;padding-top:24px;flex-wrap:wrap;gap:14px;font-size:10px}
+.mc-footer-bot{display:flex;justify-content:space-between;padding-top:24px;flex-wrap:wrap;gap:14px;font-size:10px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--cream-dim)}
 
-/* ── New elements ────────────────────────────────────────────────── */
-.mc-svc-qualifier{
-  display:block;font-size:10px;color:var(--gold);letter-spacing:0.15em;
-  opacity:0.75;font-variant:small-caps;text-transform:uppercase;margin-top:16px;
-}
-.mc-plan-price-note{
-  font-size:12px;color:var(--cream-dim);font-style:italic;
-  font-family:var(--serif);margin-bottom:18px;padding-top:4px;
-}
-.mc-hero-easter{
-  font-size:14px;color:var(--cream);font-style:italic;
-  font-family:var(--sans);letter-spacing:0.05em;text-align:center;
-  margin-top:6px;pointer-events:none;
-  opacity:0.03;transition:opacity .15s ease;mix-blend-mode:screen;
-  filter:brightness(2.6) contrast(1.15);
-  text-decoration:underline;
-  text-decoration-color:rgba(212,175,55,0.55);
-  text-underline-offset:4px;
-  text-decoration-thickness:1px;
-}
-
-/* ── Tweaks panel overrides (keep low specificity) ───────────────── */
-.cream-dim{color:var(--cream-dim)}
-.serif-it{font-family:var(--serif);font-style:italic}
+/* Tweaks panel */
+.twk-panel{position:fixed;right:16px;bottom:16px;z-index:9999;width:280px;max-height:calc(100vh - 32px);display:none;flex-direction:column;background:rgba(250,249,247,.9);color:#29261b;-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:.5px solid rgba(255,255,255,.6);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.18);font:11.5px/1.4 ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+.twk-panel.open{display:flex}
+.twk-hd{display:flex;align-items:center;justify-content:space-between;padding:10px 8px 10px 14px;cursor:move;user-select:none;border-bottom:.5px solid rgba(0,0,0,.08)}
+.twk-hd b{font-size:12px;font-weight:600}
+.twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);width:22px;height:22px;border-radius:6px;cursor:pointer;font-size:13px}
+.twk-x:hover{background:rgba(0,0,0,.06)}
+.twk-body{padding:8px 14px 14px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.twk-row{display:flex;flex-direction:column;gap:5px}
+.twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+.twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+.twk-lbl span:first-child{font-weight:500}
+.twk-val{color:rgba(41,38,27,.5)}
+.twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(41,38,27,.45);padding-top:8px}
+.twk-field{appearance:none;width:100%;height:26px;padding:0 8px;border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.7);color:inherit;font:inherit;outline:none}
+.twk-slider{appearance:none;width:100%;height:4px;margin:6px 0;border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+.twk-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2)}
 </style>
 </head>
 <body>
-<div id="root"></div>
 
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<div class="grain"></div>
+<div class="mc-progress" aria-hidden="true"><div id="js-progress"></div></div>
 
-<script type="text/babel">
-/* ═══════════════════════════════════════════════════════════════════
-   TWEAKS PANEL
-═══════════════════════════════════════════════════════════════════ */
-const __TWEAKS_STYLE = `
-  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
-    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
-    background:rgba(250,249,247,.78);color:#29261b;
-    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
-    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
-    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
-    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
-  .twk-hd{display:flex;align-items:center;justify-content:space-between;
-    padding:10px 8px 10px 14px;cursor:move;user-select:none}
-  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
-  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
-    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
-  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
-  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
-    overflow-y:auto;overflow-x:hidden;min-height:0}
-  .twk-row{display:flex;flex-direction:column;gap:5px}
-  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
-  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
-  .twk-lbl>span:first-child{font-weight:500}
-  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
-  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
-    color:rgba(41,38,27,.45);padding:10px 0 0}
-  .twk-sect:first-child{padding-top:0}
-  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
-    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
-    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
-  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
-  select.twk-field{padding-right:22px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");background-repeat:no-repeat;background-position:right 8px center}
-  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
-    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
-  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
-  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
-    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
-  .twk-toggle[data-on="1"]{background:#34c759}
-  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
-    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
-  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
-`;
+<nav class="mc-fnav" aria-label="Section navigation">
+  <ol class="mc-fnav-list">
+    <li class="mc-fnav-item" data-section="hero">
+      <a href="#hero"><span class="mc-fnav-line" aria-hidden="true"></span><span class="mc-fnav-label">Bevezető</span></a>
+    </li>
+    <li class="mc-fnav-item" data-section="services">
+      <a href="#services"><span class="mc-fnav-line" aria-hidden="true"></span><span class="mc-fnav-label">Szolgáltatás</span></a>
+    </li>
+    <li class="mc-fnav-item" data-section="process">
+      <a href="#process"><span class="mc-fnav-line" aria-hidden="true"></span><span class="mc-fnav-label">Folyamat</span></a>
+    </li>
+    <li class="mc-fnav-item" data-section="results">
+      <a href="#results"><span class="mc-fnav-line" aria-hidden="true"></span><span class="mc-fnav-label">Eredmények</span></a>
+    </li>
+    <li class="mc-fnav-item" data-section="pricing">
+      <a href="#pricing"><span class="mc-fnav-line" aria-hidden="true"></span><span class="mc-fnav-label">Csomagok</span></a>
+    </li>
+    <li class="mc-fnav-item" data-section="cta">
+      <a href="#cta"><span class="mc-fnav-line" aria-hidden="true"></span><span class="mc-fnav-label">Kapcsolat</span></a>
+    </li>
+  </ol>
+</nav>
 
-const { useState, useEffect, useRef, useMemo, useCallback } = React;
+<main>
 
-function useTweaks(defaults) {
-  const [values, setValues] = useState(defaults);
-  const setTweak = useCallback((keyOrEdits, val) => {
-    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
-      ? keyOrEdits : { [keyOrEdits]: val };
-    setValues(prev => ({ ...prev, ...edits }));
-  }, []);
-  return [values, setTweak];
-}
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section id="hero" class="mc-hero-v2">
+  <canvas id="js-hero-canvas" class="mc-hero-canvas" aria-hidden="true"></canvas>
 
-function TweaksPanel({ title = 'Tweaks', children }) {
-  const [open, setOpen] = useState(false);
-  const dragRef = useRef(null);
-  const offsetRef = useRef({ x: 16, y: 16 });
-  const PAD = 16;
+  <div class="mc-hero-top">
+    <span class="mono cream-dim">★ Vol. XXVI · Budapest 2026</span>
+    <span class="mono" style="color:var(--gold)">EST. MMXIX</span>
+  </div>
 
-  const clampToViewport = useCallback(() => {
-    const panel = dragRef.current;
-    if (!panel) return;
-    const w = panel.offsetWidth, h = panel.offsetHeight;
-    offsetRef.current = {
-      x: Math.min(Math.max(PAD, window.innerWidth - w - PAD), Math.max(PAD, offsetRef.current.x)),
-      y: Math.min(Math.max(PAD, window.innerHeight - h - PAD), Math.max(PAD, offsetRef.current.y)),
-    };
-    panel.style.right = offsetRef.current.x + 'px';
-    panel.style.bottom = offsetRef.current.y + 'px';
-  }, []);
-
-  useEffect(() => {
-    const onMsg = e => {
-      const t = e?.data?.type;
-      if (t === '__activate_edit_mode') setOpen(true);
-      else if (t === '__deactivate_edit_mode') setOpen(false);
-    };
-    window.addEventListener('message', onMsg);
-    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
-    return () => window.removeEventListener('message', onMsg);
-  }, []);
-
-  const onDragStart = e => {
-    const panel = dragRef.current;
-    if (!panel) return;
-    const r = panel.getBoundingClientRect();
-    const sx = e.clientX, sy = e.clientY;
-    const startRight = window.innerWidth - r.right;
-    const startBottom = window.innerHeight - r.bottom;
-    const move = ev => {
-      offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) };
-      clampToViewport();
-    };
-    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
-    window.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', up);
-  };
-
-  if (!open) return null;
-  return (
-    <>
-      <style>{__TWEAKS_STYLE}</style>
-      <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
-        <div className="twk-hd" onMouseDown={onDragStart}>
-          <b>{title}</b>
-          <button className="twk-x" onMouseDown={e => e.stopPropagation()} onClick={() => setOpen(false)}>✕</button>
-        </div>
-        <div className="twk-body">{children}</div>
+  <div class="mc-hero-grid">
+    <div class="mc-hero-left">
+      <div class="mc-hero-eyebrow">
+        <span class="mono" style="color:var(--gold)">✦ B2B CONTENT</span>
+        <span class="mono cream-dim">·</span>
+        <span class="mono cream-dim">HIGH-VALUE PROJEKTEK · BUDAPEST</span>
       </div>
-    </>
-  );
-}
-
-function TweakSection({ label }) { return <div className="twk-sect">{label}</div>; }
-
-function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
-  return (
-    <div className="twk-row">
-      <div className="twk-lbl"><span>{label}</span><span className="twk-val">{value}{unit}</span></div>
-      <input type="range" className="twk-slider" min={min} max={max} step={step}
-        value={value} onChange={e => onChange(Number(e.target.value))} />
+      <h1 id="js-h1" class="mc-hero-h1 serif">
+        Tartalom, ami<br><em>megmutatja</em> mire<br>képes a vállalkozásod.
+      </h1>
+      <p id="js-desc" class="mc-hero-desc">
+        Komplex termék. Magas ár. Hosszú döntési folyamat.
+        Mi pontosan erre vagyunk kitalálva — videókkal és weboldalakkal,
+        amik nem csak szépek, hanem el is adnak.
+      </p>
+      <div class="mc-hero-actions">
+        <a href="#cta" class="mc-btn"><span>Ajánlatot kérek</span><span class="mc-btn-arrow" aria-hidden="true">→</span></a>
+        <a href="#services" class="mc-btn mc-btn-ghost"><span>Munkáink</span><span class="mc-btn-arrow" aria-hidden="true">→</span></a>
+      </div>
     </div>
-  );
-}
-
-function TweakToggle({ label, value, onChange }) {
-  return (
-    <div className="twk-row twk-row-h">
-      <div className="twk-lbl"><span>{label}</span></div>
-      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
-        role="switch" aria-checked={!!value} onClick={() => onChange(!value)}><i /></button>
+    <div class="mc-hero-right">
+      <img id="js-logo" src="logo.png" alt="MiniCrew strongman" class="mc-hero-logo">
+      <p id="js-easter" class="mc-hero-easter">Kis kalappal is lehet nagyot köszönni!</p>
     </div>
-  );
-}
+  </div>
+</section>
 
-function TweakSelect({ label, value, options, onChange }) {
-  return (
-    <div className="twk-row">
-      <div className="twk-lbl"><span>{label}</span></div>
-      <select className="twk-field" value={value} onChange={e => onChange(e.target.value)}>
-        {options.map(o => <option key={o} value={o}>{o}</option>)}
+<!-- ── SERVICES ──────────────────────────────────────────────────── -->
+<section id="services" class="mc-section">
+  <div class="container">
+    <div class="mc-eyebrow-wrap">
+      <span class="mc-eyebrow-text"><span class="mc-eyebrow-no">§ II</span>Amit csinálunk</span>
+      <span class="mc-eyebrow-rule"></span>
+    </div>
+    <h2 class="mc-h2 serif">Szolgáltatások.</h2>
+
+    <div class="mc-svc-grid">
+      <ol class="mc-svc-list" id="js-svc-list">
+        <li class="mc-svc-item open" data-svc="0">
+          <span class="mc-svc-no mono">01</span>
+          <span class="mc-svc-t">Social media videók</span>
+          <span class="mc-svc-hu">— Reels · TikTok · Shorts</span>
+          <span class="mc-svc-arrow">→</span>
+        </li>
+        <li class="mc-svc-item" data-svc="1">
+          <span class="mc-svc-no mono">02</span>
+          <span class="mc-svc-t">Weboldal tervezés</span>
+          <span class="mc-svc-hu">— Landing-től full site-ig</span>
+          <span class="mc-svc-arrow">→</span>
+        </li>
+        <li class="mc-svc-item" data-svc="2">
+          <span class="mc-svc-no mono">03</span>
+          <span class="mc-svc-t">Content stratégia</span>
+          <span class="mc-svc-hu">— Adatvezérelt terv</span>
+          <span class="mc-svc-arrow">→</span>
+        </li>
+        <li class="mc-svc-item" data-svc="3">
+          <span class="mc-svc-no mono">04</span>
+          <span class="mc-svc-t">Vágás &amp; post-produkció</span>
+          <span class="mc-svc-hu">— Meglévő anyagból profi</span>
+          <span class="mc-svc-arrow">→</span>
+        </li>
+      </ol>
+      <article class="mc-svc-detail" id="js-svc-detail"></article>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROCESS ───────────────────────────────────────────────────── -->
+<section id="process" class="mc-section mc-process">
+  <div class="container">
+    <div class="mc-eyebrow-wrap">
+      <span class="mc-eyebrow-text"><span class="mc-eyebrow-no">§ III</span>Hogyan dolgozunk</span>
+      <span class="mc-eyebrow-rule"></span>
+    </div>
+    <h2 class="mc-h2 serif">Átlátható folyamat.<br><em>Nincsenek meglepetések.</em></h2>
+
+    <div class="mc-process-row" id="js-process-row">
+      <div class="mc-process-cell">
+        <div class="mc-process-cell-top">
+          <span class="mc-process-roman">I</span>
+          <span class="mono cream-dim">FÁZIS · 01</span>
+        </div>
+        <h3 class="mc-process-cell-t serif">Briefing</h3>
+        <div class="mc-process-cell-time mono">Online · 30 perc</div>
+        <p class="mc-process-cell-d">Megismerjük a vállalkozást, a célt és a hangnemet. Nincs felesleges meeting.</p>
+      </div>
+      <div class="mc-process-cell">
+        <div class="mc-process-cell-top">
+          <span class="mc-process-roman">II</span>
+          <span class="mono cream-dim">FÁZIS · 02</span>
+        </div>
+        <h3 class="mc-process-cell-t serif">Adatbekérő</h3>
+        <div class="mc-process-cell-time mono">48 órán belül</div>
+        <p class="mc-process-cell-d">Konkrét célok, mérőszámok, deliverable-ök. Mindent papíron rögzítünk — meglepetés nélkül.</p>
+      </div>
+      <div class="mc-process-cell">
+        <div class="mc-process-cell-top">
+          <span class="mc-process-roman">III</span>
+          <span class="mono cream-dim">FÁZIS · 03</span>
+        </div>
+        <h3 class="mc-process-cell-t serif">Koncepció &amp; gyártás</h3>
+        <div class="mc-process-cell-time mono">Megbeszélt határidőre</div>
+        <p class="mc-process-cell-d">Forgatókönyv, design, gyártás. Profin legyártjuk, te közben a vállalkozásoddal foglalkozol.</p>
+      </div>
+      <div class="mc-process-cell">
+        <div class="mc-process-cell-top">
+          <span class="mc-process-roman">IV</span>
+          <span class="mono cream-dim">FÁZIS · 04</span>
+        </div>
+        <h3 class="mc-process-cell-t serif">Átadás &amp; revízió</h3>
+        <div class="mc-process-cell-time mono">Revíziós körrel</div>
+        <p class="mc-process-cell-d">Élesítés, dokumentáció, és addig finomítunk, amíg büszke leszel rá — és nyersz vele.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESULTS ───────────────────────────────────────────────────── -->
+<section id="results" class="mc-section">
+  <div class="container">
+    <div class="mc-eyebrow-wrap">
+      <span class="mc-eyebrow-text"><span class="mc-eyebrow-no">§ IV</span>Ügyfeleink mondták</span>
+      <span class="mc-eyebrow-rule"></span>
+    </div>
+    <h2 class="mc-h2 serif">Amit ügyfeleink<br><em>mondanak rólunk.</em></h2>
+
+    <div class="mc-testi-row">
+      <article class="mc-testi">
+        <div class="mc-testi-mark" aria-hidden="true">"</div>
+        <p class="mc-testi-quote serif">Az első hét után háromszor annyi Instagram elérésünk lett. Végre van tartalmunk, amire büszkék vagyunk — nem csak posztolnunk kell.</p>
+        <div class="mc-testi-by">
+          <div class="mc-testi-name serif">Kovács Márton</div>
+          <div class="mc-testi-role mono cream-dim">Tulajdonos · Márton Kávézó</div>
+        </div>
+      </article>
+      <article class="mc-testi">
+        <div class="mc-testi-mark" aria-hidden="true">"</div>
+        <p class="mc-testi-quote serif">A weboldalunk egy héten belül kész lett — azóta háromszor annyi ajánlatkérést kapunk. Megérte minden forintját.</p>
+        <div class="mc-testi-by">
+          <div class="mc-testi-name serif">Varga Eszter</div>
+          <div class="mc-testi-role mono cream-dim">CEO · StyleBox Kft.</div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ───────────────────────────────────────────────────── -->
+<section id="pricing" class="mc-section mc-pricing">
+  <div class="container">
+    <div class="mc-eyebrow-wrap">
+      <span class="mc-eyebrow-text"><span class="mc-eyebrow-no">§ V</span>Átlátható árazás</span>
+      <span class="mc-eyebrow-rule"></span>
+    </div>
+    <h2 class="mc-h2 serif">Csomagok.</h2>
+    <p class="mc-h2-sub cream-dim">
+      Nem tömegtermék. Minden projekt egyedi árajánlattal indul —
+      mert a te piacodon más a tét, más a tartalom, más az elvárás.
+    </p>
+
+    <div class="mc-pricing-row">
+      <article class="mc-plan">
+        <div class="mc-plan-no mono">N° 01 / 03</div>
+        <h3 class="mc-plan-name serif">Social media</h3>
+        <div class="mc-plan-sub">— havi együttműködés</div>
+        <p class="mc-plan-desc">Folyamatos content gyártás Reels/TikTok/Shorts formátumban. Stratégiával együtt.</p>
+        <ul class="mc-plan-points">
+          <li><span class="mc-plan-point-mark mono">✦</span> 8–12 short-form videó / hó</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> scripting + thumbnail</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> platform-optimalizált export</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> havi riport és optimalizálás</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> prioritás visszajelzés</li>
+        </ul>
+        <div class="mc-plan-price-note">Egyedi ajánlat — 30 perces call alapján</div>
+        <a href="#cta" class="mc-plan-cta">Érdekel →</a>
+      </article>
+      <article class="mc-plan">
+        <div class="mc-plan-no mono">N° 02 / 03</div>
+        <h3 class="mc-plan-name serif">Weboldal</h3>
+        <div class="mc-plan-sub">— fix projekt</div>
+        <p class="mc-plan-desc">Modern, gyors, konvertáló oldal — landing-től teljes site-ig. Karbantartással együtt.</p>
+        <ul class="mc-plan-points">
+          <li><span class="mc-plan-point-mark mono">✦</span> UX &amp; design rendszer</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> Webflow vagy egyedi kód</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> SEO alapok + analytics</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> tartalmi feltöltés</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> 6 hó support</li>
+        </ul>
+        <div class="mc-plan-price-note">Egyedi ajánlat — 30 perces call alapján</div>
+        <a href="#cta" class="mc-plan-cta">Beszéljünk →</a>
+      </article>
+      <article class="mc-plan">
+        <div class="mc-plan-no mono">N° 03 / 03</div>
+        <h3 class="mc-plan-name serif">Egyedi projekt</h3>
+        <div class="mc-plan-sub">— árajánlat alapján</div>
+        <p class="mc-plan-desc">Komplex kampány, márkafilm, B2B sales videó — minden, ami nem fér bele a sablonba.</p>
+        <ul class="mc-plan-points">
+          <li><span class="mc-plan-point-mark mono">✦</span> teljes content stratégia</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> videó + weboldal kombinálva</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> dedikált kapcsolattartó</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> negyedéves stratégia</li>
+          <li><span class="mc-plan-point-mark mono">✦</span> árajánlatra</li>
+        </ul>
+        <div class="mc-plan-price-note">Egyedi ajánlat — 30 perces call alapján</div>
+        <a href="#cta" class="mc-plan-cta">Kérek ajánlatot →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ───────────────────────────────────────────────────────── -->
+<section id="cta" class="mc-section mc-cta mc-hero-spot">
+  <div class="container mc-cta-grid">
+    <div class="mc-cta-left">
+      <div class="mc-eyebrow-wrap">
+        <span class="mc-eyebrow-text"><span class="mc-eyebrow-no">§ VI</span>Kapcsolat</span>
+        <span class="mc-eyebrow-rule"></span>
+      </div>
+      <h2 class="mc-h2 serif" style="margin-bottom:18px">Ismerjük meg<br><em>egymást.</em></h2>
+      <p class="mc-cta-desc">
+        Egy rövid hívás alatt kiderül, hogy tudunk-e együtt dolgozni. Nem kötelez semmire.
+      </p>
+      <ul class="mc-cta-meta">
+        <li>
+          <span class="mono cream-dim">EMAIL</span>
+          <a href="mailto:hello@minicrew.hu">hello@minicrew.hu</a>
+        </li>
+      </ul>
+    </div>
+
+    <form id="js-cta-form" class="mc-cta-form">
+      <div class="mc-cta-form-no mono">No / 01 — Új projekt</div>
+      <input type="text" name="_gotcha" class="mc-cta-hp" tabindex="-1" autocomplete="off">
+
+      <label class="mc-cta-field">
+        <span>Neved</span>
+        <input type="text" name="name" required placeholder="Kovács Márton">
+      </label>
+      <label class="mc-cta-field">
+        <span>Email</span>
+        <input type="email" name="email" required placeholder="te@vallalkozasod.hu">
+      </label>
+      <label class="mc-cta-field">
+        <span>Vállalkozás</span>
+        <input type="text" name="company" placeholder="Cégnév · iparág">
+      </label>
+      <label class="mc-cta-field">
+        <span>Mit szeretnél</span>
+        <select name="service">
+          <option value="" disabled selected>— válassz —</option>
+          <option>Social media videók</option>
+          <option>Weboldal</option>
+          <option>Content stratégia</option>
+          <option>Egyedi projekt</option>
+        </select>
+      </label>
+      <label class="mc-cta-field">
+        <span>Üzenet</span>
+        <textarea name="message" rows="4" placeholder="Mesélj röviden a projektről…"></textarea>
+      </label>
+
+      <div id="js-cta-error" class="mc-cta-error"></div>
+      <button type="submit" id="js-cta-submit" class="mc-cta-submit">
+        <span>Küldés</span><span aria-hidden="true">→</span>
+      </button>
+      <div class="mc-cta-fineprint mono cream-dim">A küldéssel elfogadod adatkezelési tájékoztatónkat.</div>
+    </form>
+
+    <div id="js-cta-sent" class="mc-cta-sent" style="grid-column:2;padding:40px 32px;border:1px solid var(--line);background:rgba(212,175,55,0.02)">
+      <div style="font-family:var(--serif);font-style:italic;font-size:36px;color:var(--gold);margin-bottom:12px">Köszönjük.</div>
+      <p class="cream-dim">Megkaptuk az üzeneted — hamarosan jelentkezünk.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ── FOOTER ────────────────────────────────────────────────────── -->
+<footer class="mc-footer">
+  <div class="container">
+    <div class="mc-footer-grid">
+      <div class="mc-footer-brand">
+        <img src="logo.png" alt="MiniCrew" class="mc-footer-logo">
+        <div class="mc-footer-mark">MiniCrew</div>
+        <p class="mc-footer-tag">„Kis kalappal is lehet<br>nagyot köszönni."</p>
+      </div>
+      <div>
+        <div class="mc-footer-h">Navigáció</div>
+        <ul class="mc-footer-list">
+          <li><a href="#services">Szolgáltatások</a></li>
+          <li><a href="#process">Folyamat</a></li>
+          <li><a href="#pricing">Csomagok</a></li>
+          <li><a href="#cta">Ajánlatkérés</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="mc-footer-h">Kapcsolat</div>
+        <ul class="mc-footer-list">
+          <li><a href="mailto:hello@minicrew.hu">hello@minicrew.hu</a></li>
+          <li>Budapest VII., HU</li>
+        </ul>
+      </div>
+      <div>
+        <div class="mc-footer-h">Kövess</div>
+        <ul class="mc-footer-list">
+          <li><a href="#">Instagram ↗</a></li>
+          <li><a href="#">TikTok ↗</a></li>
+          <li><a href="#">LinkedIn ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mc-footer-bot">
+      <span>© 2026 MiniCrew · Minden jog fenntartva.</span>
+      <span>Budapest · Made with care.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── TWEAKS PANEL ──────────────────────────────────────────────── -->
+<div id="js-twk" class="twk-panel">
+  <div class="twk-hd" id="js-twk-hd">
+    <b>MiniCrew Tweaks</b>
+    <button class="twk-x" id="js-twk-close">✕</button>
+  </div>
+  <div class="twk-body">
+    <div class="twk-sect">Hero</div>
+    <div class="twk-row">
+      <div class="twk-lbl"><span>Blend mode</span></div>
+      <select class="twk-field" id="js-twk-blend">
+        <option value="screen" selected>screen</option>
+        <option value="lighten">lighten</option>
+        <option value="normal">normal</option>
+        <option value="difference">difference</option>
+        <option value="exclusion">exclusion</option>
       </select>
     </div>
-  );
-}
+  </div>
+</div>
 
-/* ═══════════════════════════════════════════════════════════════════
-   ATOMS — shared hooks, GoldButton, Eyebrow
-═══════════════════════════════════════════════════════════════════ */
-function useSpotlight(ref, intensity = 1) {
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const onMove = e => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', e.clientX - r.left + 'px');
-      el.style.setProperty('--my', e.clientY - r.top + 'px');
-      el.style.setProperty('--mi', intensity);
-    };
-    const onLeave = () => el.style.setProperty('--mi', 0);
-    el.addEventListener('mousemove', onMove);
-    el.addEventListener('mouseleave', onLeave);
-    return () => { el.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave); };
-  }, [ref, intensity]);
-}
+<script>
+'use strict';
 
-function useInView(opts = { threshold: 0.15 }) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { setInView(true); io.disconnect(); }
-    }, opts);
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return [ref, inView];
-}
-
-function useScrollProgress() {
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    const onScroll = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setP(max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll); };
-  }, []);
-  return p;
-}
-
-function GoldButton({ children, ghost = false, onClick, href }) {
-  const Tag = href ? 'a' : 'button';
-  return (
-    <Tag href={href} onClick={onClick} className={`mc-btn${ghost ? ' mc-btn-ghost' : ''}`}>
-      <span className="mc-btn-label">{children}</span>
-      <span className="mc-btn-arrow" aria-hidden="true">→</span>
-    </Tag>
-  );
-}
-
-function Eyebrow({ no, children }) {
-  return (
-    <div style={{ display:'flex', alignItems:'center', gap:'14px' }}>
-      <span style={{ fontFamily:'var(--mono)', fontSize:11, color:'var(--gold)', letterSpacing:'0.18em' }}>
-        {no && <span style={{ marginRight:10, opacity:.55 }}>§ {no}</span>}
-        {children}
-      </span>
-      <span style={{ flex:1, height:1, background:'linear-gradient(to right, rgba(212,175,55,.6), transparent)' }} />
-    </div>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   FLOATING NAV
-═══════════════════════════════════════════════════════════════════ */
-function FloatingNav({ items, activeIdx }) {
-  const [hovered, setHovered] = useState(null);
-  return (
-    <nav className="mc-fnav" aria-label="Section navigation">
-      <ol className="mc-fnav-list">
-        {items.map((it, i) => {
-          const active = i === activeIdx;
-          const expanded = hovered === i || active;
-          return (
-            <li key={it.id} className={`mc-fnav-item${active ? ' active' : ''}${expanded ? ' expanded' : ''}`}>
-              <a href={`#${it.id}`}
-                onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}
-                onFocus={() => setHovered(i)} onBlur={() => setHovered(null)}
-                aria-current={active ? 'true' : undefined}>
-                <span className="mc-fnav-line" aria-hidden="true" />
-                <span className="mc-fnav-label">{it.label}</span>
-              </a>
-            </li>
-          );
-        })}
-      </ol>
-    </nav>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════════════════════════════ */
-function HeroCanvas({ heroRef, h1Ref, descRef, logoRef, easterRef }) {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const hero = heroRef.current;
-    const canvas = canvasRef.current;
-    if (!hero || !canvas) return;
-    const ctx = canvas.getContext('2d');
-    let W = 0, H = 0, raf = 0, lx = 0, ly = 0, mx = 0, my = 0, entered = false;
-
-    function resize() { W = canvas.width = hero.offsetWidth; H = canvas.height = hero.offsetHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-
-    const lerp = (a, b, t) => a + (b - a) * t;
-
-    const onMove = e => {
-      const rect = hero.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      mx = e.clientX - rect.left;
-      my = e.clientY - rect.top;
-      entered = true;
-
-      const h1 = h1Ref.current, desc = descRef.current, logo = logoRef.current;
-      if (h1) {
-        const d = Math.hypot(mx - W * 0.32, my - H * 0.5);
-        const prox = Math.max(0, 1 - d / Math.hypot(W * 0.55, H * 0.55));
-        h1.style.color = `rgba(245,236,215,${0.32 + prox * 0.62})`;
-      }
-      if (desc) {
-        const d = Math.hypot(mx - W * 0.32, my - H * 0.62);
-        const prox = Math.max(0, 1 - d / Math.hypot(W * 0.55, H * 0.55));
-        desc.style.color = `rgba(245,236,215,${0.20 + prox * 0.45})`;
-      }
-      if (logo) {
-        const d = Math.hypot(mx - W * 0.74, my - H * 0.50);
-        const prox = Math.max(0, 1 - d / Math.hypot(W * 0.42, H * 0.55));
-        logo.style.opacity = 0.05 + prox * 0.55;
-      }
-      const easter = easterRef.current;
-      if (easter) {
-        const d = Math.hypot(mx - W * 0.74, my - H * 0.72);
-        const prox = Math.max(0, 1 - d / Math.hypot(W * 0.42, H * 0.45));
-        easter.style.opacity = 0.03 + prox * 0.52;
-      }
-    };
-    document.addEventListener('mousemove', onMove);
-
-    const particles = Array.from({ length: 70 }, () => ({
-      x: Math.random() * 1920, y: Math.random() * 1080,
-      r: Math.random() * 1.6 + 0.3,
-      vx: (Math.random() - 0.5) * 0.18, vy: (Math.random() - 0.5) * 0.18,
-      baseO: Math.random() * 0.35 + 0.06, phase: Math.random() * Math.PI * 2,
-    }));
-
-    function drawBeam(ox, oy, spread, alpha) {
-      const angle = Math.atan2(ly - oy, lx - ox);
-      const len = Math.hypot(W, H) * 1.2;
-      const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, len);
-      g.addColorStop(0, `rgba(212,175,55,${alpha})`);
-      g.addColorStop(0.35, `rgba(212,175,55,${alpha * 0.2})`);
-      g.addColorStop(1, 'transparent');
-      ctx.fillStyle = g;
-      ctx.beginPath(); ctx.moveTo(ox, oy);
-      ctx.arc(ox, oy, len, angle - spread, angle + spread);
-      ctx.closePath(); ctx.fill();
-    }
-
-    function frame() {
-      raf = requestAnimationFrame(frame);
-      if (!entered) { mx = W * 0.74; my = H * 0.46; }
-      lx = lerp(lx, mx, 0.06); ly = lerp(ly, my, 0.06);
-
-      ctx.clearRect(0, 0, W, H);
-      ctx.fillStyle = '#0a0802'; ctx.fillRect(0, 0, W, H);
-
-      drawBeam(0, 0, 0.20, 0.10); drawBeam(W, 0, 0.20, 0.10);
-      drawBeam(0, 0, 0.07, 0.06); drawBeam(W, 0, 0.07, 0.06);
-
-      const g1 = ctx.createRadialGradient(lx, ly, 0, lx, ly, 480);
-      g1.addColorStop(0, 'rgba(212,175,55,0.18)');
-      g1.addColorStop(0.4, 'rgba(212,175,55,0.05)');
-      g1.addColorStop(1, 'transparent');
-      ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
-
-      const g2 = ctx.createRadialGradient(lx, ly, 0, lx, ly, 180);
-      g2.addColorStop(0, 'rgba(245,236,215,0.10)'); g2.addColorStop(1, 'transparent');
-      ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
-
-      for (const p of particles) {
-        p.x += p.vx; p.y += p.vy; p.phase += 0.014;
-        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
-        const d = Math.hypot(p.x - lx, p.y - ly);
-        const prox = Math.max(0, 1 - d / 280);
-        const o = (p.baseO + Math.sin(p.phase) * 0.08) * (1 + prox * 2.4);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r + prox * 1.3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(212,175,55,${Math.min(o, 0.85)})`;
-        ctx.fill();
-      }
-
-      const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.30, W / 2, H / 2, H * 0.92);
-      v.addColorStop(0, 'transparent'); v.addColorStop(1, 'rgba(4,3,1,0.82)');
-      ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
-    }
-    frame();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('resize', resize);
-      document.removeEventListener('mousemove', onMove);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="mc-hero-canvas" aria-hidden="true" />;
-}
-
-function Hero({ tweaks }) {
-  const heroRef = useRef(null);
-  const h1Ref = useRef(null);
-  const descRef = useRef(null);
-  const logoRef = useRef(null);
-  const easterRef = useRef(null);
-
-  return (
-    <section ref={heroRef} className="mc-hero-v2" id="hero">
-      <HeroCanvas heroRef={heroRef} h1Ref={h1Ref} descRef={descRef} logoRef={logoRef} easterRef={easterRef} />
-
-      <div className="mc-hero-top">
-        <span className="mono cream-dim">★ Vol. XXVI · Budapest 2026</span>
-        <span className="mono" style={{ color:'var(--gold)' }}>EST. MMXIX</span>
-      </div>
-
-      <div className="mc-hero-grid">
-        <div className="mc-hero-left">
-          <div className="mc-hero-eyebrow">
-            <span className="mono" style={{ color:'var(--gold)' }}>✦ B2B CONTENT</span>
-            <span className="mono cream-dim">·</span>
-            <span className="mono cream-dim">HIGH-VALUE PROJEKTEK · BUDAPEST</span>
-          </div>
-
-          <h1 ref={h1Ref} className="mc-hero-h1 serif">
-            Tartalom, ami<br /><em>megmutatja</em> mire<br />képes a vállalkozásod.
-          </h1>
-
-          <p ref={descRef} className="mc-hero-desc">
-            Komplex termék. Magas ár. Hosszú döntési folyamat.
-            Mi pontosan erre vagyunk kitalálva — videókkal és weboldalakkal,
-            amik nem csak szépek, hanem el is adnak.
-          </p>
-
-          <div className="mc-hero-actions">
-            <GoldButton href="#cta">Ajánlatot kérek</GoldButton>
-            <GoldButton href="#services" ghost>Munkáink →</GoldButton>
-          </div>
-        </div>
-
-        <div className="mc-hero-right">
-          <img
-            ref={logoRef}
-            src="logo.png"
-            alt="MiniCrew strongman"
-            className="mc-hero-logo"
-            style={{ mixBlendMode: tweaks.blendMode || 'screen' }}
-          />
-          <p ref={easterRef} className="mc-hero-easter">Kis kalappal is lehet nagyot köszönni!</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   SERVICES
-═══════════════════════════════════════════════════════════════════ */
+/* ── DATA ───────────────────────────────────────────────────────── */
 const SERVICES = [
   { no:'01', t:'Social media videók', hu:'Reels · TikTok · Shorts',
     body:'Forgatókönyvtől a vágásig. Algoritmus-tudatos tartalom, ami nem csak elér, hanem konvertál — lájk helyett vásárlót hoz.',
@@ -862,396 +636,270 @@ const SERVICES = [
     details:['vágás és ritmus','szín és hang-mix','feliratozás','thumbnail design'] },
 ];
 
-function Services() {
-  const [open, setOpen] = useState(0);
-  return (
-    <section id="services" className="mc-section">
-      <div className="container">
-        <Eyebrow no="II">Amit csinálunk</Eyebrow>
-        <h2 className="mc-h2 serif">Szolgáltatások.</h2>
+/* ── SCROLL PROGRESS ────────────────────────────────────────────── */
+const progressBar = document.getElementById('js-progress');
+window.addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+}, { passive: true });
 
-        <div className="mc-svc-grid">
-          <ol className="mc-svc-list">
-            {SERVICES.map((s, i) => (
-              <li key={s.no}
-                className={`mc-svc-item${open === i ? ' open' : ''}`}
-                onClick={() => setOpen(i)}
-                onMouseEnter={() => setOpen(i)}>
-                <span className="mc-svc-no mono">{s.no}</span>
-                <span className="mc-svc-t serif">{s.t}</span>
-                <span className="mc-svc-hu serif-it cream-dim">— {s.hu}</span>
-                <span className="mc-svc-arrow">→</span>
-              </li>
-            ))}
-          </ol>
+/* ── FLOATING NAV ───────────────────────────────────────────────── */
+(function() {
+  const items = document.querySelectorAll('.mc-fnav-item');
+  const sections = ['hero','services','process','results','pricing','cta'].map(id => document.getElementById(id));
 
-          <article key={open} className="mc-svc-detail">
-            <div className="mc-svc-detail-no mono">N° {SERVICES[open].no} / 04</div>
-            <h3 className="mc-svc-detail-t serif">{SERVICES[open].t}</h3>
-            <p className="mc-svc-detail-hu serif-it">{SERVICES[open].hu}</p>
-            <p className="mc-svc-detail-body cream-dim">{SERVICES[open].body}</p>
-            {SERVICES[open].qualifier && (
-              <p className="mc-svc-qualifier">{SERVICES[open].qualifier}</p>
-            )}
-            <ul className="mc-svc-bullets">
-              {SERVICES[open].details.map((d, i) => (
-                <li key={i}><span className="mono mc-svc-bul-mark">→</span> {d}</li>
-              ))}
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-  );
-}
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        items.forEach(it => it.classList.toggle('active', it.dataset.section === e.target.id));
+      }
+    });
+  }, { rootMargin: '-40% 0px -40% 0px' });
+  sections.forEach(s => s && io.observe(s));
 
-/* ═══════════════════════════════════════════════════════════════════
-   PROCESS
-═══════════════════════════════════════════════════════════════════ */
-const STEPS = [
-  { no:'I',   t:'Briefing',            time:'Online · 30 perc',       d:'Megismerjük a vállalkozást, a célt és a hangnemet. Nincs felesleges meeting.' },
-  { no:'II',  t:'Adatbekérő',          time:'48 órán belül',          d:'Konkrét célok, mérőszámok, deliverable-ök. Mindent papíron rögzítünk — meglepetés nélkül.' },
-  { no:'III', t:'Koncepció & gyártás', time:'Megbeszélt határidőre',  d:'Forgatókönyv, design, gyártás. Profin legyártjuk, te közben a vállalkozásoddal foglalkozol.' },
-  { no:'IV',  t:'Átadás & revízió',    time:'Revíziós körrel',        d:'Élesítés, dokumentáció, és addig finomítunk, amíg büszke leszel rá — és nyersz vele.' },
-];
+  items.forEach(item => {
+    const a = item.querySelector('a');
+    a.addEventListener('mouseenter', () => item.classList.add('expanded'));
+    a.addEventListener('mouseleave', () => item.classList.remove('expanded'));
+    a.addEventListener('focus',      () => item.classList.add('expanded'));
+    a.addEventListener('blur',       () => item.classList.remove('expanded'));
+  });
+})();
 
-function Process() {
-  const [ref, inView] = useInView({ threshold: 0.25 });
-  return (
-    <section ref={ref} id="process" className="mc-section mc-process">
-      <div className="container">
-        <Eyebrow no="III">Hogyan dolgozunk</Eyebrow>
-        <h2 className="mc-h2 serif">Átlátható folyamat.<br /><em>Nincsenek meglepetések.</em></h2>
+/* ── HERO CANVAS ────────────────────────────────────────────────── */
+(function() {
+  const hero   = document.getElementById('hero');
+  const canvas = document.getElementById('js-hero-canvas');
+  const h1     = document.getElementById('js-h1');
+  const desc   = document.getElementById('js-desc');
+  const logo   = document.getElementById('js-logo');
+  const easter = document.getElementById('js-easter');
+  const ctx    = canvas.getContext('2d');
 
-        <div className="mc-process-row">
-          {STEPS.map((s, i) => (
-            <div key={s.no} className="mc-process-cell"
-              style={{ transitionDelay:`${i * 90}ms`, opacity:inView ? 1 : 0, transform:inView ? 'translateY(0)' : 'translateY(24px)' }}>
-              <div className="mc-process-cell-top">
-                <span className="serif-it mc-process-roman">{s.no}</span>
-                <span className="mono cream-dim">FÁZIS · {String(i + 1).padStart(2, '0')}</span>
-              </div>
-              <h3 className="mc-process-cell-t serif">{s.t}</h3>
-              <div className="mc-process-cell-time mono">{s.time}</div>
-              <p className="mc-process-cell-d cream-dim">{s.d}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+  let W=0, H=0, raf=0, lx=0, ly=0, mx=0, my=0, entered=false;
 
-/* ═══════════════════════════════════════════════════════════════════
-   RESULTS / TESTIMONIALS
-═══════════════════════════════════════════════════════════════════ */
-const QUOTES = [
-  { q:'Az első hét után háromszor annyi Instagram elérésünk lett. Végre van tartalmunk, amire büszkék vagyunk — nem csak posztolnunk kell.', who:'Kovács Márton', role:'Tulajdonos · Márton Kávézó' },
-  { q:'A weboldalunk egy héten belül kész lett — azóta háromszor annyi ajánlatkérést kapunk. Megérte minden forintját.', who:'Varga Eszter', role:'CEO · StyleBox Kft.' },
-];
+  function resize() { W = canvas.width = hero.offsetWidth; H = canvas.height = hero.offsetHeight; }
+  resize();
+  window.addEventListener('resize', resize);
 
+  const lerp = (a, b, t) => a + (b - a) * t;
 
-function Results() {
-  return (
-    <section id="results" className="mc-section">
-      <div className="container">
-        <Eyebrow no="IV">Ügyfeleink mondták</Eyebrow>
-        <h2 className="mc-h2 serif">Amit ügyfeleink<br /><em>mondanak rólunk.</em></h2>
+  document.addEventListener('mousemove', e => {
+    const r = hero.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) return;
+    mx = e.clientX - r.left;
+    my = e.clientY - r.top;
+    entered = true;
 
-        <div className="mc-testi-row">
-          {QUOTES.map((q, i) => (
-            <article key={i} className="mc-testi">
-              <div className="mc-testi-mark serif-it" aria-hidden="true">"</div>
-              <p className="mc-testi-quote serif">{q.q}</p>
-              <div className="mc-testi-by">
-                <div className="mc-testi-name serif">{q.who}</div>
-                <div className="mc-testi-role mono cream-dim">{q.role}</div>
-              </div>
-            </article>
-          ))}
-        </div>
+    const prox = (cx, cy, rx, ry) => Math.max(0, 1 - Math.hypot(mx-cx, my-cy) / Math.hypot(rx, ry));
 
-      </div>
-    </section>
-  );
-}
+    h1.style.color     = `rgba(245,236,215,${0.32 + prox(W*.32, H*.5,  W*.55, H*.55) * .62})`;
+    desc.style.color   = `rgba(245,236,215,${0.20 + prox(W*.32, H*.62, W*.55, H*.55) * .45})`;
+    logo.style.opacity =  0.05 + prox(W*.74, H*.50, W*.42, H*.55) * .55;
+    easter.style.opacity = 0.03 + prox(W*.74, H*.72, W*.42, H*.45) * .52;
+  });
 
-/* ═══════════════════════════════════════════════════════════════════
-   PRICING
-═══════════════════════════════════════════════════════════════════ */
-const PLANS = [
-  { name:'Social media', sub:'havi együttműködés',
-    desc:'Folyamatos content gyártás Reels/TikTok/Shorts formátumban. Stratégiával együtt.',
-    points:['8–12 short-form videó / hó','scripting + thumbnail','platform-optimalizált export','havi riport és optimalizálás','prioritás visszajelzés'],
-    cta:'Érdekel' },
-  { name:'Weboldal', sub:'fix projekt',
-    desc:'Modern, gyors, konvertáló oldal — landing-től teljes site-ig. Karbantartással együtt.',
-    points:['UX & design rendszer','Webflow vagy egyedi kód','SEO alapok + analytics','tartalmi feltöltés','6 hó support'],
-    cta:'Beszéljünk' },
-  { name:'Egyedi projekt', sub:'árajánlat alapján',
-    desc:'Komplex kampány, márkafilm, B2B sales videó — minden, ami nem fér bele a sablonba.',
-    points:['teljes content stratégia','videó + weboldal kombinálva','dedikált kapcsolattartó','negyedéves stratégia','árajánlatra'],
-    cta:'Kérek ajánlatot' },
-];
+  const particles = Array.from({length:70}, () => ({
+    x: Math.random()*1920, y: Math.random()*1080,
+    r: Math.random()*1.6+0.3,
+    vx: (Math.random()-.5)*.18, vy: (Math.random()-.5)*.18,
+    baseO: Math.random()*.35+.06, phase: Math.random()*Math.PI*2,
+  }));
 
-function Pricing() {
-  return (
-    <section id="pricing" className="mc-section mc-pricing">
-      <div className="container">
-        <Eyebrow no="V">Átlátható árazás</Eyebrow>
-        <h2 className="mc-h2 serif">Csomagok.</h2>
-        <p className="mc-h2-sub cream-dim">
-          Nem tömegtermék. Minden projekt egyedi árajánlattal indul —
-          mert a te piacodon más a tét, más a tartalom, más az elvárás.
-        </p>
+  function drawBeam(ox, oy, spread, alpha) {
+    const angle = Math.atan2(ly-oy, lx-ox), len = Math.hypot(W,H)*1.2;
+    const g = ctx.createRadialGradient(ox,oy,0,ox,oy,len);
+    g.addColorStop(0, `rgba(212,175,55,${alpha})`);
+    g.addColorStop(.35,`rgba(212,175,55,${alpha*.2})`);
+    g.addColorStop(1,'transparent');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.moveTo(ox,oy);
+    ctx.arc(ox,oy,len,angle-spread,angle+spread);
+    ctx.closePath(); ctx.fill();
+  }
 
-        <div className="mc-pricing-row">
-          {PLANS.map((p, i) => (
-            <article key={p.name} className="mc-plan">
-              <div className="mc-plan-no mono">N° {String(i + 1).padStart(2, '0')} / 03</div>
-              <h3 className="mc-plan-name serif">{p.name}</h3>
-              <div className="mc-plan-sub serif-it cream-dim">— {p.sub}</div>
-              <p className="mc-plan-desc cream-dim">{p.desc}</p>
-              <ul className="mc-plan-points">
-                {p.points.map((pt, j) => (
-                  <li key={j}><span className="mc-plan-point-mark mono">✦</span> {pt}</li>
-                ))}
-              </ul>
-              <div className="mc-plan-price-note">Egyedi ajánlat — 30 perces call alapján</div>
-              <a href="#cta" className="mc-plan-cta">{p.cta} →</a>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+  function frame() {
+    raf = requestAnimationFrame(frame);
+    if (!entered) { mx = W*.74; my = H*.46; }
+    lx = lerp(lx,mx,.06); ly = lerp(ly,my,.06);
 
-/* ═══════════════════════════════════════════════════════════════════
-   CTA — contact form with Formspree
-═══════════════════════════════════════════════════════════════════ */
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#0a0802'; ctx.fillRect(0,0,W,H);
 
-// ✏️  Replace YOUR_FORM_ID with your Formspree endpoint ID.
-// Get one free at https://formspree.io — takes ~2 minutes.
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xojrkpko';
+    drawBeam(0,0,.20,.10); drawBeam(W,0,.20,.10);
+    drawBeam(0,0,.07,.06); drawBeam(W,0,.07,.06);
 
-function CTA() {
-  const [sent, setSent] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState(null);
-  const ref = useRef(null);
-  useSpotlight(ref, 0.7);
+    const g1 = ctx.createRadialGradient(lx,ly,0,lx,ly,480);
+    g1.addColorStop(0,'rgba(212,175,55,0.18)');
+    g1.addColorStop(.4,'rgba(212,175,55,0.05)');
+    g1.addColorStop(1,'transparent');
+    ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
 
-  const onSubmit = async e => {
+    const g2 = ctx.createRadialGradient(lx,ly,0,lx,ly,180);
+    g2.addColorStop(0,'rgba(245,236,215,0.10)'); g2.addColorStop(1,'transparent');
+    ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+
+    for (const p of particles) {
+      p.x+=p.vx; p.y+=p.vy; p.phase+=.014;
+      if (p.x<0) p.x=W; if (p.x>W) p.x=0;
+      if (p.y<0) p.y=H; if (p.y>H) p.y=0;
+      const d = Math.hypot(p.x-lx, p.y-ly);
+      const prox = Math.max(0, 1-d/280);
+      const o = (p.baseO + Math.sin(p.phase)*.08) * (1+prox*2.4);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r+prox*1.3, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(212,175,55,${Math.min(o,.85)})`;
+      ctx.fill();
+    }
+
+    const v = ctx.createRadialGradient(W/2,H/2,H*.30,W/2,H/2,H*.92);
+    v.addColorStop(0,'transparent'); v.addColorStop(1,'rgba(4,3,1,0.82)');
+    ctx.fillStyle=v; ctx.fillRect(0,0,W,H);
+  }
+  frame();
+})();
+
+/* ── SERVICES ───────────────────────────────────────────────────── */
+(function() {
+  const detail = document.getElementById('js-svc-detail');
+  let current = 0;
+
+  function render(idx) {
+    const s = SERVICES[idx];
+    detail.innerHTML =
+      `<div class="mc-svc-detail-no mono">N° ${s.no} / 04</div>
+       <h3 class="mc-svc-detail-t serif">${s.t}</h3>
+       <p class="mc-svc-detail-hu serif-it">${s.hu}</p>
+       <p class="mc-svc-detail-body cream-dim">${s.body}</p>
+       ${s.qualifier ? `<p class="mc-svc-qualifier">${s.qualifier}</p>` : ''}
+       <ul class="mc-svc-bullets">
+         ${s.details.map(d=>`<li><span class="mono mc-svc-bul-mark">→</span> ${d}</li>`).join('')}
+       </ul>`;
+    detail.style.animation = 'none';
+    void detail.offsetWidth;
+    detail.style.animation = 'mc-fade .35s ease';
+  }
+
+  render(0);
+
+  document.querySelectorAll('.mc-svc-item').forEach(item => {
+    const activate = () => {
+      const idx = +item.dataset.svc;
+      if (idx === current) return;
+      current = idx;
+      document.querySelectorAll('.mc-svc-item').forEach(i => i.classList.toggle('open', i===item));
+      render(idx);
+    };
+    item.addEventListener('click', activate);
+    item.addEventListener('mouseenter', activate);
+  });
+})();
+
+/* ── PROCESS REVEAL ─────────────────────────────────────────────── */
+(function() {
+  const cells = document.querySelectorAll('.mc-process-cell');
+  cells.forEach(c => { c.style.opacity='0'; c.style.transform='translateY(24px)'; c.style.transition='opacity .8s ease, transform .8s ease, background .25s ease'; });
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        cells.forEach((c,i) => setTimeout(() => {
+          c.style.opacity='1'; c.style.transform='translateY(0)';
+        }, i*90));
+        io.disconnect();
+      }
+    });
+  }, { threshold: 0.25 });
+
+  const row = document.getElementById('js-process-row');
+  if (row) io.observe(row);
+})();
+
+/* ── CTA SPOTLIGHT ──────────────────────────────────────────────── */
+(function() {
+  const cta = document.getElementById('cta');
+  cta.addEventListener('mousemove', e => {
+    const r = cta.getBoundingClientRect();
+    cta.style.setProperty('--mx', e.clientX - r.left + 'px');
+    cta.style.setProperty('--my', e.clientY - r.top + 'px');
+    cta.style.setProperty('--mi', 1);
+  });
+  cta.addEventListener('mouseleave', () => cta.style.setProperty('--mi', 0));
+})();
+
+/* ── CONTACT FORM ───────────────────────────────────────────────── */
+(function() {
+  const form   = document.getElementById('js-cta-form');
+  const sent   = document.getElementById('js-cta-sent');
+  const btn    = document.getElementById('js-cta-submit');
+  const errDiv = document.getElementById('js-cta-error');
+
+  form.addEventListener('submit', async e => {
     e.preventDefault();
-    setSending(true);
-    setError(null);
+    btn.disabled = true;
+    btn.querySelector('span').textContent = 'Küldés…';
+    errDiv.style.display = 'none';
+
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      const res = await fetch('https://formspree.io/f/xojrkpko', {
         method: 'POST',
-        body: new FormData(e.target),
+        body: new FormData(form),
         headers: { Accept: 'application/json' },
       });
       if (res.ok) {
-        setSent(true);
+        form.style.display = 'none';
+        sent.style.display = 'block';
       } else {
-        const data = await res.json().catch(() => ({}));
-        setError(data?.errors?.[0]?.message || 'Valami hiba történt. Írj nekünk emailt: hello@minicrew.hu');
+        errDiv.textContent = 'Valami hiba történt. Írj nekünk emailt: hello@minicrew.hu';
+        errDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Küldés';
       }
     } catch {
-      setError('Hálózati hiba. Kérjük próbálj újra, vagy írj emailt: hello@minicrew.hu');
-    } finally {
-      setSending(false);
+      errDiv.textContent = 'Hálózati hiba. Kérjük próbálj újra.';
+      errDiv.style.display = 'block';
+      btn.disabled = false;
+      btn.querySelector('span').textContent = 'Küldés';
     }
-  };
+  });
+})();
 
-  return (
-    <section ref={ref} id="cta" className="mc-section mc-cta mc-hero-spot">
-      <div className="container mc-cta-grid">
-        <div className="mc-cta-left">
-          <Eyebrow no="VI">Kapcsolat</Eyebrow>
-          <h2 className="mc-h2 serif" style={{ marginBottom:18 }}>
-            Ismerjük meg<br /><em>egymást.</em>
-          </h2>
-          <p className="cream-dim mc-cta-desc">
-            Egy rövid hívás alatt kiderül, hogy tudunk-e együtt dolgozni. Nem kötelez semmire.
-          </p>
-          <ul className="mc-cta-meta">
-            <li><span className="mono cream-dim">EMAIL</span><a href="mailto:hello@minicrew.hu">hello@minicrew.hu</a></li>
-          </ul>
-        </div>
+/* ── TWEAKS PANEL ───────────────────────────────────────────────── */
+(function() {
+  const panel = document.getElementById('js-twk');
+  const hd    = document.getElementById('js-twk-hd');
+  const logo  = document.getElementById('js-logo');
+  let offset  = { x:16, y:16 };
 
-        <form className="mc-cta-form" onSubmit={onSubmit}>
-          <div className="mc-cta-form-no mono">No / 01 — Új projekt</div>
+  window.addEventListener('message', e => {
+    if (e.data?.type === '__activate_edit_mode')   panel.classList.add('open');
+    if (e.data?.type === '__deactivate_edit_mode') panel.classList.remove('open');
+  });
+  window.parent.postMessage({ type: '__edit_mode_available' }, '*');
 
-          {/* Honeypot spam trap */}
-          <input type="text" name="_gotcha" className="mc-cta-hp" tabIndex="-1" autoComplete="off" />
+  document.getElementById('js-twk-close').addEventListener('click', () => {
+    panel.classList.remove('open');
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  });
 
-          {sent ? (
-            <div className="mc-cta-sent">
-              <div className="serif-it" style={{ fontSize:36, color:'var(--gold)', marginBottom:12 }}>Köszönjük.</div>
-              <p className="cream-dim">Megkaptuk az üzeneted — hamarosan jelentkezünk.</p>
-            </div>
-          ) : (
-            <>
-              <label className="mc-cta-field">
-                <span className="mono cream-dim">Neved</span>
-                <input type="text" name="name" required placeholder="Kovács Márton" />
-              </label>
-              <label className="mc-cta-field">
-                <span className="mono cream-dim">Email</span>
-                <input type="email" name="email" required placeholder="te@vallalkozasod.hu" />
-              </label>
-              <label className="mc-cta-field">
-                <span className="mono cream-dim">Vállalkozás</span>
-                <input type="text" name="company" placeholder="Cégnév · iparág" />
-              </label>
-              <label className="mc-cta-field">
-                <span className="mono cream-dim">Mit szeretnél</span>
-                <select name="service" defaultValue="">
-                  <option value="" disabled>— válassz —</option>
-                  <option>Social media videók</option>
-                  <option>Weboldal</option>
-                  <option>Content stratégia</option>
-                  <option>Egyedi projekt</option>
-                </select>
-              </label>
-              <label className="mc-cta-field mc-cta-field-area">
-                <span className="mono cream-dim">Üzenet</span>
-                <textarea name="message" rows="4" placeholder="Mesélj röviden a projektről…" />
-              </label>
-              {error && <div className="mc-cta-error">{error}</div>}
-              <button type="submit" className="mc-cta-submit" disabled={sending}>
-                <span>{sending ? 'Küldés…' : 'Küldés'}</span>
-                <span aria-hidden="true">→</span>
-              </button>
-              <div className="mc-cta-fineprint mono cream-dim">
-                A küldéssel elfogadod adatkezelési tájékoztatónkat.
-              </div>
-            </>
-          )}
-        </form>
-      </div>
-    </section>
-  );
-}
+  document.getElementById('js-twk-blend').addEventListener('change', e => {
+    logo.style.mixBlendMode = e.target.value;
+  });
 
-/* ═══════════════════════════════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════════════════════════════ */
-function Footer() {
-  return (
-    <footer className="mc-footer">
-      <div className="container">
-        <div className="mc-footer-grid">
-          <div className="mc-footer-brand">
-            <img src="logo.png" alt="MiniCrew" className="mc-footer-logo" />
-            <div className="mc-footer-mark">MiniCrew</div>
-            <p className="mc-footer-tag cream-dim">
-              „Kis kalappal is lehet<br />nagyot köszönni."
-            </p>
-          </div>
-          <div>
-            <div className="mono cream-dim mc-footer-h">NAVIGÁCIÓ</div>
-            <ul className="mc-footer-list">
-              <li><a href="#services">Szolgáltatások</a></li>
-              <li><a href="#process">Folyamat</a></li>
-              <li><a href="#pricing">Csomagok</a></li>
-              <li><a href="#cta">Ajánlatkérés</a></li>
-            </ul>
-          </div>
-          <div>
-            <div className="mono cream-dim mc-footer-h">KAPCSOLAT</div>
-            <ul className="mc-footer-list">
-              <li><a href="mailto:hello@minicrew.hu">hello@minicrew.hu</a></li>
-              <li>+36 30 ··· ····</li>
-              <li>Budapest VII., HU</li>
-            </ul>
-          </div>
-          <div>
-            <div className="mono cream-dim mc-footer-h">KÖVESS</div>
-            <ul className="mc-footer-list">
-              <li><a href="#">Instagram ↗</a></li>
-              <li><a href="#">TikTok ↗</a></li>
-              <li><a href="#">LinkedIn ↗</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="mc-footer-bot">
-          <span className="mono cream-dim">© 2026 MiniCrew · Minden jog fenntartva.</span>
-          <span className="mono cream-dim">Budapest · Made with care.</span>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   APP
-═══════════════════════════════════════════════════════════════════ */
-const SECTIONS = [
-  { id:'hero',     label:'Bevezető' },
-  { id:'services', label:'Szolgáltatás' },
-  { id:'process',  label:'Folyamat' },
-  { id:'results',  label:'Eredmények' },
-  { id:'pricing',  label:'Csomagok' },
-  { id:'cta',      label:'Kapcsolat' },
-];
-
-function App() {
-  const TWEAK_DEFAULTS = { blendMode:'screen', mascotOpacity:0.95, spotlight:true };
-  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const progress = useScrollProgress();
-
-  useEffect(() => {
-    const observers = SECTIONS.map((s, i) => {
-      const el = document.getElementById(s.id);
-      if (!el) return null;
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) setActiveIdx(i); });
-      }, { rootMargin:'-40% 0px -40% 0px' });
-      io.observe(el);
-      return io;
-    });
-    return () => observers.forEach(o => o?.disconnect());
-  }, []);
-
-  return (
-    <>
-      <div className="grain" />
-
-      <div className="mc-progress" aria-hidden="true">
-        <div style={{ transform:`scaleX(${progress})` }} />
-      </div>
-
-      <FloatingNav items={SECTIONS} activeIdx={activeIdx} />
-
-      <main>
-        <Hero tweaks={tweaks} />
-        <Services />
-        <Process />
-        <Results />
-        <Pricing />
-        <CTA />
-      </main>
-      <Footer />
-
-      <TweaksPanel title="MiniCrew Tweaks">
-        <TweakSection label="Hero" />
-        <TweakSelect label="Blend mode" value={tweaks.blendMode}
-          options={['screen','lighten','normal','difference','exclusion']}
-          onChange={v => setTweak('blendMode', v)} />
-        <TweakSlider label="Mascot opacity" value={tweaks.mascotOpacity} min={0.2} max={1} step={0.05}
-          onChange={v => setTweak('mascotOpacity', v)} />
-        <TweakToggle label="Cursor spotlight" value={tweaks.spotlight}
-          onChange={v => setTweak('spotlight', v)} />
-      </TweaksPanel>
-    </>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  hd.addEventListener('mousedown', e => {
+    const r = panel.getBoundingClientRect();
+    const sx=e.clientX, sy=e.clientY;
+    const sr=window.innerWidth-r.right, sb=window.innerHeight-r.bottom;
+    const move = ev => {
+      offset = { x: Math.max(8, sr-(ev.clientX-sx)), y: Math.max(8, sb-(ev.clientY-sy)) };
+      panel.style.right  = offset.x+'px';
+      panel.style.bottom = offset.y+'px';
+    };
+    const up = () => { window.removeEventListener('mousemove',move); window.removeEventListener('mouseup',up); };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  });
+})();
 </script>
 </body>
 </html>
